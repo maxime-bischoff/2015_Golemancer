@@ -1,0 +1,25 @@
+<rooms>
+	<room type="Tuto">
+		<enemySpawn rotation="0" posX="0" posY="-0.49" posZ="-1.99" golem_laser="false" golem_charge="false" golem_stun="false" golem_vegetable="true" force_spawn="true"/>
+		<door type="South" socket="Normal" posX="0" posY="0" posZ="16"/>
+		<door type="North" socket="Normal" posX="0" posY="0" posZ="-20.99"/>
+		<boundingbox posX="0" posZ="-2.99" radiusX="9.99" radiusZ="16.94"/>
+		<roomshape>
+  			<point posX="10.9" posZ="8.2"/>
+			<point posX="9.44" posZ="-17.97"/>
+			<point posX="-12.33" posZ="-18.11"/>
+			<point posX="-12.43" posZ="8.65"/>
+			<point posX="10.72" posZ="8.36"/>
+		</roomshape>
+		<collision rotation="0" posX="6.69" posZ="13.5" radiusX="4.63" radiusZ="2.935" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="-6.99" posZ="-2.49" radiusX="0.71" radiusZ="14.77" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="0" posZ="0" radiusX="2.585" radiusZ="0.48" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-89.99" posX="-2.49" posZ="-2.49" radiusX="2.585" radiusZ="0.48" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-89.99" posX="2.5" posZ="-2.49" radiusX="2.585" radiusZ="0.48" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="0" posZ="-4.99" radiusX="2.585" radiusZ="0.48" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="7" posZ="-2.49" radiusX="0.71" radiusZ="14.77" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="-6.49" posZ="13.5" radiusX="4.63" radiusZ="2.935" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="-6.49" posZ="-18.49" radiusX="4.63" radiusZ="2.935" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="6.5" posZ="-18.49" radiusX="4.63" radiusZ="2.935" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="true"/>
+	</room>
+</rooms>

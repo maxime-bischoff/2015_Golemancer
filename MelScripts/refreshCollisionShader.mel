@@ -1,0 +1,35 @@
+global proc refreshCollisionShader()
+{
+
+    string $path = "*|collisions|*";
+                
+    string $collisions[] = `ls -l $path`;    
+
+
+     for($collision in $collisions)
+     {     
+          $collideCamera      = `getAttr ($collision+".CollideCamera")` ;
+          $collidePlayer      = `getAttr ($collision+".CollidePlayer")` ;
+          $collideProjectile  = `getAttr ($collision+".CollideProjectiles")` ;
+          
+          if($collideCamera && $collideProjectile && $collidePlayer)
+          {              
+            sets -e -forceElement collisionWallSG $collision;              
+              
+          }else if (!$collideCamera && !$collideProjectile && $collidePlayer)
+          {              
+                sets -e -forceElement collisionHoleSG $collision;              
+          }else if (!$collideCamera && $collideProjectile && $collidePlayer)
+          {              
+                sets -e -forceElement collisionPropSG $collision;              
+          }else 
+          {             
+                sets -e -forceElement collisionOtherSG $collision;              
+          }
+          
+          
+                 
+     }
+
+print("Shader updated");
+}

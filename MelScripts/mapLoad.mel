@@ -1,0 +1,67 @@
+
+global proc mapLoad()
+{
+
+$fileName = `file -q -sn - shn`;
+$fileName = basename ($fileName, ".mb") ;
+$importedGroup = "Items";
+$importedNamefile = $fileName+"_Items.mb";
+
+if(`filetest -e $importedNamefile`)
+{
+  if(!`filetest -w $importedNamefile`)
+  { 
+      $response = `confirmDialog -title "File not writeable" 
+			              -message "The file isn't writeable, you won't be able to save later"
+			              -button "Understood"			         			             
+			              -defaultButton "Understood"	
+			              -cancelButton "Understood"		           
+			              -dismissString "Understood"`;          
+						  
+			if( $response == "Understood" ) {
+			    print ("Warning , the file "+$importedNamefile+" isn't writable");			   
+		    }
+				
+  }
+    
+}else{    
+         $response = `confirmDialog -title "File does not exist" 
+			              -message "Gosh ! The file doesn't exist, you have to create your own"
+			              -button "Damn"			         			             
+			              -defaultButton "Damn"	
+			              -cancelButton "Damn"		           
+			              -dismissString "Damn"`;          
+						  
+			if( $response == "Damn" ) {			  
+		    }   
+		      print ("Error, the file "+$importedNamefile+" doesn't exist");
+			  return;
+    }
+
+
+
+if(`objExists $importedGroup`)
+{
+delete $importedGroup;
+}
+
+file -import -type "mayaBinary" -mergeNamespacesOnClash false -rpr $importedGroup -options "v=0;" -loadReferenceDepth "none" $importedNamefile;
+
+string $badShaders[] = `ls -l ($importedGroup+"_collision*")`;
+for ($badShader in $badShaders)
+{
+    print ($badShader+"\n");
+    delete $badShader ;    
+}
+
+string $badMaterials[] = `ls -l ($importedGroup+"_material*")`;
+for ($badMaterial in $badMaterials)
+{
+    print ($badMaterial+"\n");
+    delete $badMaterial ;    
+}
+
+refreshCollisionShader();
+
+print ("Item map succesfully loded");
+}

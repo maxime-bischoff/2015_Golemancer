@@ -1,0 +1,8 @@
+addAttr -ln "Location"  -at "enum" -en "North:South:West:East:"  |Items|doorSouth1;
+setAttr -e-keyable true |Items|doorSouth1.Location;
+addAttr -ln "Location"  -at "enum" -en "North:South:West:East:"  |Items|doorSouth;
+setAttr -e-keyable true |Items|doorSouth.Location;
+addAttr -ln "Location"  -at "enum" -en "North:South:West:East:"  |Items|doorSouth2;
+setAttr -e-keyable true |Items|doorSouth2.Location;
+addAttr -ln "Location"  -at "enum" -en "North:South:West:East:"  |Items|doorSouth3;
+setAttr -e-keyable true |Items|doorSouth3.Location;

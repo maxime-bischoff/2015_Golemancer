@@ -1,0 +1,187 @@
+proc ReplaceObject(string $name)
+{
+	print ("Reloading mesh : "+$name+"\n");
+
+
+
+    string $objectsPath = $name+"*";
+    string $objects[] = `ls -l -tr $objectsPath`;
+    print ("Reloading mesh2 : "+ size($objects)+ " / "  +$objectsPath+"\n");
+	string $rootObject = "Atlantide_Props:" + $name ;
+  if($rootObject == "") return;
+
+    for ($object in $objects)
+    {
+		print("Replacing "+$object+"\n");
+
+		//`replaceObjects $object $rootObject`;
+	string $newName = $name + "_Clone";
+		string $clones[] = `duplicate -rr -n $newName $rootObject`;
+		string $clone = $clones[0];
+			print("Cloning "+ $clone +"\n");
+		string $parent[] =  `listRelatives -p $object`;
+		parent $clone $parent[0] ;
+
+        vector $pos   = `getAttr ($object + ".t")`;
+        vector $rot   = `getAttr ($object + ".r")`;
+        vector $scale = `getAttr ($object + ".s")`;
+
+        setAttr ($clone + ".t") ($pos.x)($pos.y)($pos.z);
+        setAttr ($clone + ".r") ($rot.x)($rot.y)($rot.z);
+        setAttr ($clone + ".s") ($scale.x)($scale.y)($scale.z);
+		string $nameBackup =  $object;
+
+
+		$object = `rename $object "ToDelete"`;
+
+  		string $nameArray[] = stringToStringArray($nameBackup, "|");
+		string $renameString = $nameArray[size($nameArray) -1];
+
+		$clone =`rename $clone $renameString`;
+
+		delete $object;
+
+
+    }
+}
+
+proc AssignateShader( string $objectName, string $shaderName)
+{
+	string $objectsPath = $objectName+"*";
+	string $objects[] = `ls -l -tr $objectsPath`;
+
+    for ($object in $objects)
+    {
+		select -r $object ;
+		sets -e -forceElement $shaderName ;
+	}
+
+}
+
+
+global proc ReloadMap()
+{
+
+   AssignateShader ("Ground" ,"Atlantide_Props:GroundCGFXSG");
+	AssignateShader ("MetalPlateLong" ,"Atlantide_Props:MetaGroundlCGFXSG");
+
+
+	ReplaceObject("Wall_Window_Bg");
+	ReplaceObject("Entrance_Middle");
+	ReplaceObject("Entrance_Borders");
+	ReplaceObject("Wall_Standard");
+
+  ReplaceObject("Fence_Standard");
+  ReplaceObject("Fence_StandardDiagonale");
+  ReplaceObject("Fence_Globe_Middle");
+  ReplaceObject("Fence_Border_Globe");
+  ReplaceObject("Renfort_Diagonale");
+  ReplaceObject("Renfort_Medium");
+  ReplaceObject("Renfort_Big");
+  ReplaceObject("Border_45Angle_Left");
+  ReplaceObject("Border_45Angle_Right");
+  ReplaceObject("Border_45Angle_Inner_Left");
+  ReplaceObject("Border_45Angle_Inner_Right");
+  ReplaceObject("Border_Inner90Angle");
+  ReplaceObject("Border_Outer90Angle");
+  ReplaceObject("Border_Inner90Angle2_");
+  ReplaceObject("Border_Standard");
+  ReplaceObject("Border_StandardBig");
+  ReplaceObject("Border_Diagonale");
+  ReplaceObject("Border_Diagonale_Left");
+  ReplaceObject("Border_Diagonale_Right");
+
+
+  ReplaceObject("Bottom_Large_Empty");
+  ReplaceObject("Bottom_Left_Empty");
+  ReplaceObject("Bottom_Right_Empty");
+  ReplaceObject("Bottom_Left_Junction");
+  ReplaceObject("Bottom_Right_Junction");
+  ReplaceObject("Bottom_Left_Standard");
+  ReplaceObject("Bottom_Right_Standard");
+  ReplaceObject("Bottom_Plain");
+  ReplaceObject("Column_Standard");
+  ReplaceObject("Pillar_Rising");
+  ReplaceObject("Teleporter");
+
+  ReplaceObject("Pedestal");
+
+  ReplaceObject ("arch_Left_Back");
+  ReplaceObject ("arch_Right_Back");
+  ReplaceObject ("arch_Left_Front");
+  ReplaceObject ("arch_Right_Front");
+
+   ReplaceObject ("MetalPlateO");
+  ReplaceObject ("MetalPlateC");
+  ReplaceObject ("MetalPlateU");
+  ReplaceObject ("HoloSpider");
+   ReplaceObject ("HoloPlayer");
+  ReplaceObject ("HoloGolem");
+  ReplaceObject ("EmitterHolo");
+  ReplaceObject ("RampStandard");
+
+   ReplaceObject ("HoloPedestal");
+   ReplaceObject ("HoloWall");
+   ReplaceObject ("Fence_Border_Simple");
+   ReplaceObject ("HoloPanningLight");
+
+
+
+
+
+
+}
+
+
+/*
+global proc ReloadMapSlow()
+{
+
+
+file -r -type "mayaBinary" -gr -gl -shd "shadingNetworks" -mergeNamespacesOnClash false -namespace "Atlantide_Props" -options "v=0;p=17;f=0" "Maps/Atlantide_Props.mb";
+
+
+
+}
+
+
+
+
+
+proc unloadReferences()
+{
+   string $referencesLoaded[] = referencesLoaded();
+   string $refNode;
+
+   for ( $refFile in $referencesLoaded )
+   {
+      // Need to get node that identifies reference
+      $refNode = `file -q -rfn $refFile`;
+
+      // Now you can unload it
+      file -ur $refNode $refFile;
+   }
+}
+To physically delete loaded references from the scene and the Reference Editor:
+
+proc deleteLoadedReferences()
+{
+   string $referencesLoaded[] = referencesLoaded();
+
+   for ( $refFile in $referencesLoaded )
+   {
+      file -rr $refFile;
+   }
+}
+And finally, to delete all References:
+
+proc deleteAllReferences()
+{
+   string $references = `file -q -r`;
+
+   for ( $refFile in $references )
+   {
+      file -rr $refFile;
+   }
+}
+*/

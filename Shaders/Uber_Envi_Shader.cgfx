@@ -1,0 +1,739 @@
+/**********************************************
+Transform vertex
+Color pixel
+***********************************************/
+#include "common.h"
+
+float3 matColor : DIFFUSE
+<
+string UIName = "Material Color";
+> = {0,0,0};
+
+texture diffuseSpec
+<
+	string UIName = "Diffuse Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D diffuseSpecMap <
+string UIName = "Diffuse";
+> = sampler_state{
+	Texture = <diffuseSpec>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+
+
+    #ifdef USE_ANISOTROPY
+	MaxAnisotropy = 4;
+	LODBias = -2;
+	
+		MipFilter = Anisotropic;
+	    MagFilter = Anisotropic;
+	    MinFilter = Anisotropic;
+	    
+#endif
+};
+
+float2 diffuseScale <
+string UIName = "Diffuse Scale";
+> = { 1 , 1 };
+
+
+#ifdef USE_BAKED_AO
+
+texture diffuseAO
+<
+	string UIName = "Diffuse Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D diffuseMapAO <
+string UIName = "AO Texture";
+> = sampler_state{
+	Texture = <diffuseAO>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float aoStrength <
+string UIName = "AO Strength";
+string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 1;
+> = 1.0f;
+
+#endif
+
+#ifdef USE_TWO_DIFFUSE
+
+texture diffuse2
+<
+	string UIName = "Diffuse Texture 2";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D diffuseMap2 <
+string UIName = "Second Diffuse";
+> = sampler_state{
+	Texture = <diffuse2>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+
+
+};
+
+float2 diffuse2Scale <
+string UIName = "Diffuse Scale";
+> = { 1 , 1 };
+
+float2 diffuse2Offset <
+string UIName = "Diffuse Scale";
+> = { 0 , 0 };
+
+float diffuseBlend <
+string UIName = "Diffuse Blend";
+string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 1;
+> = 0.0f;
+
+
+#endif
+
+
+float3 lightColor : DIFFUSE
+<
+
+> = {1,1,1};
+
+float4 lightDir : DIRECTION
+<
+	string Space = "World";
+> = {0,1,0,0};
+
+float3 ambient : DIFFUSE
+<
+> = {0.2,0.2,0.2};
+
+
+#if defined (USE_BOTTOM_FALLOFF) || defined (USE_TOP_FALLOFF)
+
+texture falloffTexture
+<
+	string TextureType = "2D";
+>;
+
+sampler2D falloffMap <
+string UIName = "Falloff";
+> = sampler_state {
+	Texture = <falloffTexture>;
+	WrapS = ClampToEdge;
+	WrapT = ClampToEdge;
+	MinFilter = Linear;
+	MagFilter = Linear;
+};
+
+#endif
+
+
+
+
+#ifdef  USE_TOP_FALLOFF
+bool spacerFalloff<string UIName   = "FALLOFF ==================";> = false;
+
+float3 ceilingColor : DIFFUSE
+<
+> = {0.1,0.1,0.1};
+
+float ceilingLimit
+<
+	string UIWidget = "slider";
+	float UIMin = -30;
+	float UIMax = 30;
+> = 5;
+
+float ceilingStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0;
+#endif
+
+#ifdef  USE_BOTTOM_FALLOFF
+
+
+float3 beneathColor : DIFFUSE
+<
+> = {0.2,1,1};
+
+float beneathLimit
+<
+	string UIWidget = "slider";
+	float UIMin = -30;
+	float UIMax = 30;
+> = -5.0;
+
+float beneathStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0;
+
+float beneathPower
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 30.0;
+> = 1.0;
+
+
+#endif
+
+
+
+float3 specLightColor : DIFFUSE
+<
+> = {1,1,1};
+
+float matShininess
+<
+	string UIWidget = "slider";
+	float UIMin = 1.0;
+	float UIMax = 100.0;
+> = 25.0;
+
+float matFresnel
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 0.0;
+
+#ifdef USE_NORMAL
+
+bool spacerN<string UIName   = "NORMAL ==================";> = false;
+texture normalTex
+<
+	string UIName = "Normal Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D normalMap 
+<
+string UIName = "Normal";
+> = sampler_state{
+	Texture = <normalTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+
+
+
+#ifdef USE_ANISOTROPY
+//	MaxAnisotropy = 4;
+/*	LODBias = -4;
+	
+		MipFilter = Anisotropic;
+	    MagFilter = Anisotropic;
+	    MinFilter = Point;
+	    */
+#endif
+
+
+};
+
+float normalStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0f;
+
+#endif
+
+
+
+#if defined (USE_EMISSIVE) || defined (USE_REFLECTION)
+
+texture emissiveReflecTex
+<
+	string UIName = "Exmissive Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D emissiveReflecMap 
+<
+string UIName = "Emissive";
+> = sampler_state{
+	Texture = <emissiveReflecTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+
+#endif
+
+
+
+#ifdef USE_EMISSIVE
+
+bool spacerEMI<string UIName   = "EMISSIVE ==================";> = false;
+
+
+
+float emissiveStrenght
+<
+	string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 1;
+> = 0; 
+
+
+float2 emissiveScale
+<
+> = {1,1}; 
+
+	#ifdef USE_EMISSIVE_FALLOFF
+	float emissiveFallOff
+	<
+		string UIWidget = "slider";
+		float UIMin = -20.0;
+		float UIMax = 20.0f;
+	> = 0.0;
+
+	float emissiveFallOffPower
+	<
+		string UIWidget = "slider";
+		float UIMin = 0.0;
+		float UIMax = 5.0f;
+	> = 1.0;
+	#endif
+
+	#ifdef USE_EMISSIVE_PANNING
+
+texture emissivePanningTex
+<
+	string UIName = "Exmissive Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D emissivePanningMap 
+<
+string UIName = "Emissive Panning";
+> = sampler_state{
+	Texture = <emissivePanningTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float2 emissivePanningSpeed
+<> =  {0,0};
+
+float2 emissivePanningScale
+<> =  {1,1};
+
+
+
+	#endif
+
+
+#endif
+
+#ifdef USE_REFLECTION
+bool spacerREF<string UIName   = "REFLEXION ==================";> = false;
+#ifdef USE_REFLECTION_CUBE
+texture reflectionTexture
+<
+	string UIName = "Reflection Texture";
+	string name = "default_texture.dds";
+	string ResourceType = "Cube";
+>;
+
+samplerCUBE cubeMap 
+<
+string UIName = "Cube Map";
+> = sampler_state
+{
+	Texture = <reflectionTexture>;
+	MinFilter = LinearMipMapLinear;
+  	MagFilter = Linear;
+	WrapR = ClampToEdge;
+	WrapS = ClampToEdge;
+	WrapT = ClampToEdge;
+};
+
+#else
+texture skyDomeTexture
+<
+	string RessourceType = "2D";
+>;
+
+sampler2D skyDomeMap 
+<
+string UIName = "Sky Dome";
+> = sampler_state
+{
+Texture = <skyDomeTexture>;
+WrapR = ClampToEdge;
+WrapS = ClampToEdge;
+MinFilter = LinearMipMapLinear;
+MagFilter = Linear;
+//MaxAnisotropy = 4;
+//LODBias = -.5;
+};
+
+
+
+#endif
+
+float3 metalColor : DIFFUSE
+<
+> =  {1,1,1};
+
+
+
+float reflectionStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0;
+
+float reflectionMetalness
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0;
+
+float reflectionRoughness
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0;
+
+float metalnessCorrection
+<
+	string UIWidget = "slider";
+	float UIMin = 1.0;
+	float UIMax = 6.0;
+> = 1.0;
+
+#endif
+
+
+#ifdef USE_FOG
+bool spacerFOG<string UIName   = "FOG ==================";> = false;
+
+float3 fogColor: DIFFUSE
+<
+> = {0,0,1};
+
+
+float fogFar
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 300.0f;
+> = 300.0;
+
+float fogPower
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 5.0f;
+> = 1.0;
+
+float fogOpacity
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0f;
+> = 0.0;
+
+#endif
+
+#ifdef USE_FRESNEL_GLOW
+
+float3 glowColor : DIFFUSE
+<
+> = {0,0,0};
+
+float glowStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 1;
+> = 0; 
+
+float glowWidth
+<
+	string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 3;
+> = 2; 
+
+
+#endif
+
+float time : TIME;
+
+struct appData
+{
+	float4 pos 			: POSITION ; // position 3d objet
+	float3 N 			: NORMAL ;
+	float3 T 			: TANGENT  ;
+	//float3 B : BINORMAL;
+	float2 UV			: TEXCOORD0 ;
+	#ifdef USE_BAKED_AO 
+	float2 UV2 			: TEXCOORD1 ;	
+	#endif	
+
+
+
+};
+
+
+struct v2f
+{
+	float4 pos 			: POSITION ; // position 2d projetée	
+	#ifdef USE_BAKED_AO 
+	half2 UV2 			: TEXCOORD1 ;	
+	#endif
+	half4 VU 			: TEXCOORD0;
+	half4 LV 			: TEXCOORD1;	
+	float4 wPos : TEXCOORD4;
+	half3 N : TEXCOORD5;
+
+
+};
+
+
+
+//================================================================================
+//vertex shader
+//================================================================================
+v2f vShader( appData i)
+{
+	v2f o;
+	o.pos = mul(worldViewProj,i.pos);	//transform to view and project
+	float3 P = mul(world, i.pos).xyz ;//world vertex position
+	float3 N = mul(world, float4(i.N, 0)).xyz;
+	float3 T = mul(world, float4(i.T, 0)).xyz;
+	float3 B = cross(N,T);
+	//float3 B =  - mul(world, float4(i.B, 0)).xyz;
+
+	float3x3 worldToTangent = float3x3(T,B,N);
+
+	//View Vector
+	float3 E = viewInverseTranspose[3].xyz;
+	float3 Vworld = E-P;
+	o.VU.rgb= mul(worldToTangent, Vworld);
+	o.VU.rgb = normalize(o.VU.rgb);
+	//Light Vector
+	o.LV.rgb = mul( worldToTangent, -lightDir.xyz ).rgb;
+
+	o.wPos.xyz = mul(world, i.pos).xyz;
+	o.VU.a = i.UV.x;
+	o.LV.a = i.UV.y;
+
+	#ifdef USE_BAKED_AO 
+	o.UV2 = i.UV2;
+	#endif
+
+
+#ifdef USE_FOG
+		float distance =  length(float2(Vworld.x, Vworld.z));
+	o.wPos.w =  pow(saturate(   distance  / fogFar  ), fogPower) ; 
+#endif
+	o.N = N;
+
+return o;
+}
+
+//=================================================================
+//pixel shader
+//=================================================================
+float4 pShader( v2f i ) : COLOR
+{
+	float4 o;
+
+	half2 UV = half2(i.VU.a, i.LV.a);
+	half3 L = i.LV.rgb;
+	half3 N = half3(0,0,1);
+	half3 V = i.VU.rgb;
+	
+
+
+
+
+#ifdef USE_NORMAL
+	half2 Nxy = tex2D(normalMap  , UV ).ga*2-1 ;
+	// N = half3( Nxy, sqrt(1- Nxy.x*Nxy.x - Nxy.y*Nxy.y ) );
+	// N =  lerp(half3(0,0,1) , N,  normalStrength );
+	 N =  normalize(half3(Nxy, 1) );
+#endif
+
+	half3 RV = reflect( -V, N );
+	half3 R = reflect(L, N);
+
+
+	half fresnel = saturate(2-matFresnel-saturate(dot(N,V)));
+	//half shadeDot =  saturate( dot(N, L));
+
+
+	half4 matDS = tex2D(diffuseSpecMap  , UV ) ;
+	half4 matER = half4(0,0,0,0);
+
+#if defined (USE_EMISSIVE) || defined (USE_REFLECTION)
+	 matER = tex2D(emissiveReflecMap  , UV ) ;
+#endif
+
+	half3 texColor = matDS.rgb;	
+	half specMask = 1;
+
+#ifdef USE_SPEC
+	 specMask = matDS.a;
+
+#endif
+
+
+
+
+
+	float diffuseLight = saturate(dot(N,L));
+	float specularLight = pow(saturate(dot(-V,R)),matShininess);
+
+	half3 diffuse = diffuseLight * lightColor;
+	half3 specular = specularLight * specLightColor ;
+
+
+
+
+
+
+#ifdef USE_REFLECTION
+	half3 reflexionColor = float3(0,0,0);	
+	half reflexionMask = matER.a;
+
+/*
+o.rgb = half3(1,1,1);
+o.a = 1;
+return o;
+*/
+
+	#ifdef USE_REFLECTION_CUBE
+		 reflexionColor =  texCUBE(cubeMap, -reflect(V,N) , reflectionRoughness, reflectionRoughness );
+	#else
+	half2 envUV = RV.xz * .5 + .5;
+	reflexionColor.rgb =  tex2D(skyDomeMap, envUV, reflectionRoughness, reflectionRoughness ).rgb ;
+	#endif
+	reflexionColor.rgb = reflexionColor *metalColor;
+	texColor.rgb = lerp( texColor.rgb , lerp(reflexionColor.rgb,  reflexionColor.rgb * texColor.rgb *metalnessCorrection ,    reflectionMetalness)  ,  reflectionStrength * reflexionMask);
+
+//o.rgb =  texColor;
+//return o;
+
+#endif
+	o.rgb = texColor * (diffuse + ambient)  + specular * specMask * fresnel  ;
+
+
+
+#ifdef USE_FRESNEL_GLOW
+	half3 glow =  glowColor * (1 - saturate(dot(N, V) * glowWidth)) * glowStrength;
+	o.rgb += glow ;	
+#endif
+
+	
+	
+
+#ifdef USE_EMISSIVE
+	half3 emiColor =  matER.rgb;
+	half fEmissiveFalloffOpacity =1.0f;
+	#ifdef USE_EMISSIVE_FALLOFF
+
+ 	fEmissiveFalloffOpacity	=  1 - saturate( (i.wPos.y - emissiveFallOff)  * emissiveFallOffPower);
+	#endif
+
+	half fPanningOpacity = 1.0f;
+ 	#ifdef USE_EMISSIVE_PANNING
+
+	fPanningOpacity =   tex2D(emissivePanningMap, UV *  emissivePanningScale  + time * emissivePanningSpeed);
+	#endif
+	o.rgb +=  emiColor  * fEmissiveFalloffOpacity * emissiveStrenght * fPanningOpacity;
+#endif
+
+
+
+
+	
+
+
+#ifdef USE_TOP_FALLOFF
+	half fInterpCeiling = saturate( ((i.wPos.y - ceilingLimit)  * ceilingStrength));
+	fInterpCeiling = tex2D(falloffMap, float2(0.5f,1-fInterpCeiling)).x;
+	o.rgb *=  1-fInterpCeiling;	
+#endif
+
+
+#ifdef USE_BOTTOM_FALLOFF
+
+		//beneathColor = float3(0,1,1) ;
+		//beneathLimit = -10.645  ;
+		//beneathStrength =0.142  ;
+		//beneathPower = 0.0  ;
+
+
+
+	half fInterpBeneath =   1 - saturate( (i.wPos.y - beneathLimit)  * beneathStrength);
+fInterpBeneath = tex2D(falloffMap, float2(0.5f,1-fInterpBeneath)).x;
+//	fInterpBeneath = tex2D(falloffMap, UV);
+
+	o.rgb =   o.rgb * (1-fInterpBeneath )+  (   fInterpBeneath )* beneathColor;
+//o.rgb = +=fInterpBeneath * beneathColor;
+
+#endif
+
+o.a = 1;
+return o;
+
+
+}
+
+//---------------------------------------------
+technique t0
+{ 
+	pass p0
+    {		
+		VertexProgram   = compile VS_PROFILE vShader();
+		FragmentProgram = compile PS_PROFILE pShader();
+    }
+}
+
+

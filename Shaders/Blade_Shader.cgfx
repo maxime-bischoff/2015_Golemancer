@@ -1,0 +1,33 @@
+//#define USE_FOG
+//#define USE_NORMAL
+//#define USE_SPEC
+
+#define USE_EMISSIVE
+//#define USE_FRESNEL_GLOW
+
+#define USE_FADING
+
+
+
+
+//#define USE_BAKED_AO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include "Alpha_Shader.cgfx"

@@ -1,0 +1,85 @@
+/**********************************************
+Transform vertex
+Color pixel
+***********************************************/
+#include "common.h"
+
+float3 matColor : DIFFUSE
+<
+string UIName = "Material Color";
+> = {0,0,0};
+
+float opacity 
+< > = 1.0f;
+
+
+texture diffuse
+<
+	string UIName = "Diffuse Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D diffuseMap <
+string UIName = "Diffuse";
+> = sampler_state{
+	Texture = <diffuse>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+
+
+
+struct appData
+{
+	float4 pos 			: POSITION ; // position 3d objet
+	float2 UV			: TEXCOORD0 ;
+};
+
+
+struct v2f
+{
+	float4 pos 		: POSITION ; // position 2d projetée
+	half2 UV 		: TEXCOORD0;
+};
+
+
+
+//================================================================================
+//vertex shader
+//================================================================================
+v2f vShader( appData i)
+{
+	v2f o;
+	o.pos = mul(worldViewProj,i.pos);	//transform to view and project	
+	o.UV = i.UV;
+
+return o;
+}
+
+//=================================================================
+//pixel shader
+//=================================================================
+float4 pShader( v2f i ) : COLOR
+{
+	float4 o;
+	o.rgb = tex2D(diffuseMap, i.UV);
+	o.a = opacity;
+	return o;
+}
+
+//---------------------------------------------
+technique t0
+{ 
+	pass p0
+    {		
+		VertexProgram   = compile VS_PROFILE vShader();
+		FragmentProgram = compile PS_PROFILE pShader();
+    }
+}
+
+

@@ -1,0 +1,49 @@
+global proc mapSave()
+{
+$fileName = `file -q -sn - shn`;
+$fileName = basename ($fileName, ".mb") ;
+string $groupeName = "Items";
+string $exportFilename = $fileName+"_Items.mb";
+
+if(`about -version` == "2015")
+	{
+		 $response = `confirmDialog -title "ERROR" 
+							  -message "You can't save the map in maya 2015"
+							  -button "Ok"			         			             
+							  -defaultButton "Ok"	
+							  -cancelButton "Ok"		           
+							  -dismissString "Ok"`;          
+							  
+				if( $response == "Ok" ) {
+					print ("Error, you can't save this map in maya 2015");
+					return;
+				}
+
+	}
+
+
+if(`filetest -e $exportFilename`)
+{
+  if(!`filetest -w $exportFilename`)
+  { 
+      $response = `confirmDialog -title "Unable to save" 
+			              -message "Gosh ! The destination file isn't writable. The file can't be saved"
+			              -button "Damn"			         			             
+			              -defaultButton "Damn"	
+			              -cancelButton "Damn"		           
+			              -dismissString "Damn"`;          
+						  
+			if( $response == "Damn" ) {
+			    print ("Error, the file "+$exportFilename+" isn't writable");
+			    return;
+		    }
+				
+  }
+    
+}
+
+select -r $groupeName;
+file -force -options "v=0;" -typ "mayaBinary" -pr -es $exportFilename;
+
+print ("Items succesfully saved in the location "+$exportFilename );
+}

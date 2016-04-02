@@ -1,0 +1,8 @@
+{
+	print("Scene load script perso\n\n");
+	source "Reload_Map.mel";
+	source "mapExporter.mel";
+	source "Reload_Scripts.mel";
+	source "Menu.mel";
+	Menu;
+}

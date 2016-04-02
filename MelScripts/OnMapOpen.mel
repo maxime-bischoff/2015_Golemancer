@@ -1,0 +1,39 @@
+global proc OnMapOpen()
+{
+	if(`about -version` == "2015")
+	{
+		 $response = `confirmDialog -title "Uncorrect version of maya" 
+							  -message "You try to open the map in maya 2015, you won't be able to save"
+							  -button "Ok"			         			             
+							  -defaultButton "Ok"	
+							  -cancelButton "Ok"		           
+							  -dismissString "Ok"`;          
+							  
+				if( $response == "Ok" ) {
+					print ("Error, you can't open this map in maya 2015");
+					return;
+				}
+
+	}
+
+	if(`about -version` == "2014")
+	{
+		 $response = `confirmDialog -title "Do you want to reload items" 
+							  -message "Do you want to reload items"
+							  -button "Yes"			
+							  -button "No"								  
+							  -defaultButton "Yes"							  
+							  -cancelButton "No"		           
+							  -dismissString "No"`;          
+							  
+				if( $response == "Yes" ) {
+					mapLoad;
+					print("On Open Event \n");
+				}
+	
+	
+	
+	
+		
+	}
+}

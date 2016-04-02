@@ -1,0 +1,290 @@
+/**********************************************
+Transform vertex
+Color pixel
+***********************************************/
+#include "common.h"
+
+float3 matColor : DIFFUSE
+<
+string UIName = "Material Color";
+> = {0,0,0};
+
+float3 lightColor : DIFFUSE
+<
+
+> = {1,1,1};
+
+float4 lightDir : DIRECTION
+<
+	string Space = "World";
+> = {0,1,0,0};
+
+float3 ambient : DIFFUSE
+<
+> = {0.2,0.2,0.2};
+
+
+float3 ceilingColor : DIFFUSE
+<
+> = {0.2,0.2,0.2};
+
+float ceilingLimit
+<
+	string UIWidget = "slider";
+	float UIMin = -10;
+	float UIMax = 10;
+> = 5;
+
+float ceilingStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0;
+
+float3 beneathColor : DIFFUSE
+<
+> = {0.2,0.2,0.2};
+
+float beneathLimit
+<
+	string UIWidget = "slider";
+	float UIMin = -10;
+	float UIMax = 10;
+> = -5.0;
+
+float beneathStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0;
+
+
+texture diffuseR
+<
+	string UIName = "Diffuse Texture R";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D diffuseMapR <
+string UIName = "Diffuse R";
+> = sampler_state{
+	Texture = <diffuseR>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+
+texture diffuseG
+<
+	string UIName = "Diffuse Texture G";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D diffuseMapG <
+string UIName = "Diffuse G";
+> = sampler_state{
+	Texture = <diffuseG>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+texture diffuseB
+<
+	string UIName = "Diffuse Texture B";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D diffuseMapB <
+string UIName = "Diffuse B";
+> = sampler_state{
+	Texture = <diffuseB>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+texture specTex
+<
+	string UIName = "Specular Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D specMap 
+<
+string UIName = "Specular";
+> = sampler_state{
+	Texture = <specTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float3 specLightColor : DIFFUSE
+<
+> = {1,1,1};
+
+float matShininess
+<
+	string UIWidget = "slider";
+	float UIMin = 1.0;
+	float UIMax = 100.0;
+> = 25.0;
+
+float matFresnel
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 0.0;
+
+texture normalTex
+<
+	string UIName = "Normal Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D normalMap 
+<
+string UIName = "Normal";
+> = sampler_state{
+	Texture = <normalTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float normalStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0f;
+
+
+struct appData
+{
+	float4 pos 			: POSITION ; // position 3d objet
+	float3 N 			: NORMAL ;
+	float2 UV 			: TEXCOORD0 ;
+	float4 binormal 	: TEXCOORD1 ;
+	float4 tangent 		: TANGENT ;
+	float4 vertexColor : COLOR0;
+};
+
+
+struct v2f
+{
+	float4 pos 				: POSITION ; // position 2d projetée
+	float3 N 				: TEXCOORD0 ;
+	float3 worldBinormal 	: TEXCOORD1 ;
+	float3 worldTangent		: TEXCOORD2 ;
+	float3 wPos 			: TEXCOORD3;
+	float3 diff 			: TEXCOORD4;
+	float2 UV 				: TEXCOORD5;
+	float4 vertexColor : COLOR0;
+};
+
+
+
+//================================================================================
+//vertex shader
+//================================================================================
+v2f vShader( appData i)
+{
+	v2f o;
+
+	o.pos = mul(worldViewProj, i.pos);
+
+	o.N = mul(worldInverseTranspose,float4(i.N, 0) ).xyz;
+	o.worldBinormal = mul(worldInverseTranspose,i.binormal).xyz;
+	o.worldTangent = mul(worldInverseTranspose,i.tangent).xyz;
+
+	o.wPos = mul(world, i.pos).xyz;
+	o.vertexColor = i.vertexColor;
+	o.UV = i.UV;
+
+	return o;
+
+}
+
+//=================================================================
+//pixel shader
+//=================================================================
+float4 pShader( v2f i ) : COLOR
+{
+
+	float3 worldNormal = tex2D(normalMap  , i.UV )*2 - 1 ;
+
+	worldNormal = 	normalize( (worldNormal.x * i.worldTangent) + (- worldNormal.y * i.worldBinormal) + (worldNormal.z * i.N)) ;
+	
+	float4 o;
+	float3 N = normalize(i.N);
+	N = lerp(  i.N, worldNormal, normalStrength) ;
+	float3 E = viewInverseTranspose[3].xyz; //get eye position from viewInverseTranspose matrix
+	float3 V = normalize(E-i.wPos);
+	float3 L = -(normalize(lightDir.xyz));
+	float3 R = reflect(L,N);
+	float2 UV = i.UV;
+
+	float fresnel = saturate(2-matFresnel-saturate(dot(N,V)));
+
+	float shadeDot =  saturate( dot(N, L));
+
+	float4 texColorR = tex2D(diffuseMapR  , i.UV ) ;	
+	float4 texColorG = tex2D(diffuseMapG  , i.UV ) ;	
+	float4 texColorB = tex2D(diffuseMapB  , i.UV ) ;	
+	float4 specColor = tex2D(specMap  , i.UV ) ;
+
+	float fTotal = i.vertexColor.r + i.vertexColor.g + i.vertexColor.b;
+
+	float4 texColor =  texColorR * (i.vertexColor.r / fTotal)  +  texColorG * (i.vertexColor.g / fTotal )+  texColorB * (i.vertexColor.b / fTotal);
+
+
+	float diffuseLight = saturate(dot(N,L));
+	float specularLight = pow(saturate(dot(-V,R)),matShininess);
+
+	float3 diffuse = diffuseLight * lightColor;
+	float3 specular = specularLight * specLightColor ;
+
+	o.rgb = texColor * (diffuse + ambient)  + specular * specColor * fresnel  + matColor;
+	//o.rgb = i.vertexColor.rgb;
+	o.rgb = lerp(o.rgb,   ceilingColor, saturate( ((i.wPos.y - ceilingLimit)  * ceilingStrength)));
+
+	o.rgb =  lerp(o.rgb, beneathColor ,   1 - saturate( (i.wPos.y - beneathLimit)  * beneathStrength));
+
+	o.a = texColor.a;
+	return o;
+}
+
+//---------------------------------------------
+technique t0
+{ 
+	pass p0
+    {		
+		VertexProgram   = compile VS_PROFILE vShader();
+		FragmentProgram = compile PS_PROFILE pShader();
+    }
+}
+
+

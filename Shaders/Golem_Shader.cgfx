@@ -1,0 +1,410 @@
+/**********************************************
+Transform vertex
+Color pixel
+***********************************************/
+#include "common.h"
+
+float3 matColor : DIFFUSE
+<
+string UIName = "Material Color";
+> = {0,0,0};
+
+float3 lightColor : DIFFUSE
+<
+
+> = {1,1,1};
+
+float4 lightDir : DIRECTION
+<
+	string Space = "World";
+> = {0,1,0,0};
+
+float3 ambient : DIFFUSE
+<
+> = {0.2,0.2,0.2};
+
+texture diffuseSpec
+<
+	string UIName = "Diffuse Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D diffuseSpecMap <
+string UIName = "Diffuse - Spec";
+> = sampler_state{
+	Texture = <diffuseSpec>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+
+float3 specLightColor : DIFFUSE
+<
+> = {1,1,1};
+
+float matShininess
+<
+	string UIWidget = "slider";
+	float UIMin = 1.0;
+	float UIMax = 100.0;
+> = 25.0;
+
+float matFresnel
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 0.0;
+
+texture normalTex
+<
+	string UIName = "Normal Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D normalMap
+<
+string UIName = "Normal";
+> = sampler_state{
+	Texture = <normalTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+
+float3 skyColor :  DIFFUSE
+<
+> = {0,1,1};
+
+float3 groundColor :  DIFFUSE
+<
+> =  {1,1,0};
+
+
+
+
+float3 fresnelColor : DIFFUSE
+<
+> = {0,0,0};
+
+float fresnelStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 1;
+> = 0;
+
+float fresnelWidth
+<
+	string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 3;
+> = 2;
+
+float emissiveStrenght
+<
+	string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 1;
+> = 0;
+
+texture emiReflecTex
+<
+	string UIName = "Exmissive Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D emiReflecMap
+<
+string UIName = "Emissive - Reflection";
+> = sampler_state{
+	Texture = <emiReflecTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+
+
+
+texture skyDomeTexture
+<
+	string RessourceType = "2D";
+>;
+
+
+sampler2D skyDomeMap 
+<
+string UIName = "Sky Dome";
+> = sampler_state
+{
+Texture = <skyDomeTexture>;
+WrapR = ClampToEdge;
+WrapS = ClampToEdge;
+MinFilter = LinearMipMapLinear;
+MagFilter = Linear;
+};
+
+
+
+float reflectionStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0;
+
+float reflectionMetalness
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0;
+
+float reflectionRoughness
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0;
+
+float metalnessCorrection
+<
+	string UIWidget = "slider";
+	float UIMin = 1.0;
+	float UIMax = 6.0;
+> = 1.0;
+
+
+
+texture noiseTex
+<
+	string UIName = "Noise Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D noiseMap 
+<
+string UIName = "Noise";
+> = sampler_state{
+	Texture = <noiseTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float3 disintegrationColor : DIFFUSE
+<
+> = {0.5,0.5,0.2};
+
+float3 innerColor : DIFFUSE
+<
+> = {0.5,0.5,0.2};
+
+
+
+float disintegrationPower
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 20.0;
+> = 1.0f;
+
+float disintegrationMultiply
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 60.0;
+> = 1.0f;
+
+
+float disintegrationScale
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 5.0;
+> = 1.0f;
+
+
+
+
+
+float time : Time;
+
+
+
+struct appData
+{
+	float4 pos 			: POSITION ; // position 3d objet
+	float3 N 			: NORMAL ;
+	float3 T			: TANGENT ;
+	float2 UV 			: TEXCOORD0 ;
+};
+
+
+struct v2f
+{
+	float4 pos 		: POSITION ; 
+	half3 L 		:  TEXCOORD0;
+	half3 V 		: TEXCOORD1;
+	half2 UV 		: TEXCOORD2;
+	//float3 wPos : TEXCOORD3;
+	half3 upVec : TEXCOORD4;
+	//half3 N : TEXCOORD5;
+};
+
+
+
+//================================================================================
+//vertex shader
+//================================================================================
+v2f vShader( appData i)
+{
+	v2f o;
+	o.pos = mul(worldViewProj,i.pos);	//transform to view and project
+	float3 P = mul(world, i.pos).xyz ;//world vertex position
+	float3 N = mul(world, float4(i.N, 0)).xyz;
+	float3 T = mul(world, float4(i.T, 0)).xyz;
+	float3 B = cross(N,T);
+
+	float3x3 worldToTangent = float3x3(T,B,N);
+
+	//View Vector
+	float3 E = viewInverseTranspose[3].xyz;
+	float3 Vworld = E-P;
+	o.V= mul(worldToTangent, Vworld);
+
+	//Light Vector
+	o.L = mul( worldToTangent, -lightDir.xyz );
+	//o.wPos = mul(world, i.pos).xyz;
+	o.upVec = mul(worldToTangent, float3(0,1,0));
+	o.UV = i.UV;
+	//o.N = mul(worldToTangent,float3(i.N) ).xyz;
+return o;
+}
+
+//=================================================================
+//pixel shader
+//=================================================================
+float4 pShader( v2f i ) : COLOR
+{
+
+
+	half4 matDS = tex2D(diffuseSpecMap  , i.UV ) ;
+	half4 matER = tex2D(emiReflecMap  , i.UV ) ;
+	half noiseColor =  tex2D(noiseMap, i.UV * disintegrationScale).r;
+
+
+	float4 o;
+
+
+	half2 UV = i.UV;
+	half3 V = normalize( i.V );
+	half3 L = i.L;
+
+
+	//Nxy = normalize(Nxy + lerp(0,Nxy2, normalStrength ));
+half3 N =  half3(0,0,1);
+#ifdef BULKY_GOLEM
+	half2 Nxy = tex2D(normalMap  , i.UV ).ga*2-1 ;
+	//N = half3( Nxy, sqrt(1- Nxy.x*Nxy.x - Nxy.y*Nxy.y ) );	
+	//N = normalize(N);
+
+	N =  normalize(half3(Nxy, 1) ) ;
+#endif
+
+	//N = i.N;
+	half3 RV = reflect( -V, N );
+
+	half dotProductUp = dot(N, i.upVec );
+
+
+	half3 R = reflect(L, N);
+	//float3 H = normalize(V+L); //Halfway
+
+	half fresnel = saturate(2-matFresnel-saturate(dot(N,V)));
+	half shadeDot =  saturate( dot(N, L));
+
+
+	half3 texColor = matDS.rgb;
+
+	
+	half specMask = matDS.a;
+	half3 emiColor = matER.rgb;
+	half reflecMask = matER.a;
+
+	
+	half2 envUV = RV.xz * .5 + .5;
+
+
+
+
+	half diffuseLight = saturate(dot(N,L));
+	half specularLight = pow(saturate(dot(-V,R)),matShininess);
+
+	half3 diffuse = diffuseLight * lightColor;
+	half3 specular = specularLight * specLightColor ;
+
+	half3 glow =  fresnelColor * (1 - saturate(dot(N, V) * fresnelWidth)) * fresnelStrength;
+
+ 	//half3 groundSkyColor =  lerp( groundColor, skyColor,  dotProductUp * 0.5 +0.5  ) ;
+	half3 groundSkyColor =   skyColor * saturate( dotProductUp ) ;
+	groundSkyColor = groundSkyColor + groundColor * ( saturate(-dotProductUp ));
+
+
+ 	//texColor.rgb = lerp( texColor.rgb , lerp(reflectionColor.rgb,  reflectionColor.rgb * texColor.rgb *metalnessCorrection,    reflectionMetalness)  ,  reflectionStrength * reflecMask);
+	
+
+	o.rgb = texColor.rgb * (diffuse + ambient + groundSkyColor)  + specular * specMask * fresnel  + emiColor * emissiveStrenght ;
+
+
+	o.rgb += glow;
+
+
+ 	half disintegration =   pow(noiseColor , disintegrationPower) * disintegrationMultiply;
+	o.rgb += disintegration * disintegrationColor ;
+
+	o.a  =  1 -  disintegration.r ;
+
+#ifndef PS3
+	if(o.a <  0.09) discard;
+//o.a  =  step( o.a, 0.1) ;
+	
+#endif
+
+	return o;
+}
+
+
+
+
+
+
+
+
+//---------------------------------------------
+technique t0
+{
+	pass p0
+    {
+ 
+
+		VertexProgram   = compile VS_PROFILE vShader();
+		FragmentProgram = compile PS_PROFILE pShader();
+    }  
+}

@@ -1,0 +1,320 @@
+/**********************************************
+Transform vertex
+Color pixel
+***********************************************/
+#include "common.h"
+
+float3 matColor : DIFFUSE
+<
+string UIName = "Material Color";
+> = {0,0,0};
+
+float3 lightColor : DIFFUSE
+<
+
+> = {1,1,1};
+
+float4 lightDir : DIRECTION
+<
+	string Space = "World";
+> = {0,1,0,0};
+
+
+
+
+
+
+texture diffuse
+<
+	string UIName = "Diffuse Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D diffuseMap <
+string UIName = "Diffuse";
+> = sampler_state{
+	Texture = <diffuse>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+
+
+
+
+
+
+
+texture normalTex
+<
+	string UIName = "Normal Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D normalMap 
+<
+string UIName = "Normal";
+> = sampler_state{
+	Texture = <normalTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float normalStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0f;
+
+texture lineTex
+<
+	string UIName = "Line Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D lineMap 
+<
+string UIName = "Lines";
+> = sampler_state{
+	Texture = <lineTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+texture gradientIntensityTex
+<
+	string UIName = "Line Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D gradientIntensityMap 
+<
+string UIName = "Gradient Intensity";
+> = sampler_state{
+	Texture = <gradientIntensityTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = Nearest;
+    MagFilter = Nearest;
+};
+
+
+
+float holoOpacity 
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0f;
+
+float lineScale
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 10;
+> = 1.0f;
+
+float gradientScale
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 10;
+> = 1.0f;
+
+float gradientOpacity
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1;
+> = 1.0f;
+
+float gradientSpeed
+<
+	string UIWidget = "slider";
+	float UIMin = -3;
+	float UIMax = 3;
+> = -1.0f;
+
+
+float energyScale
+<
+	string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 10;
+> = 1.0f;
+
+float energySpeed
+<
+	string UIWidget = "slider";
+	float UIMin = -10;
+	float UIMax = 10;
+> = 1.0f;
+
+texture noiseTex
+<
+	string UIName = "Noise Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D noiseMap
+<
+string UIName = "Noise";
+> = sampler_state{
+	Texture = <noiseTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float noiseScale
+<
+	string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 10;
+> = 1.0f;
+
+
+
+float time : Time;
+
+struct appData
+{
+
+	float4 pos 			: POSITION ; // position 3d objet
+	float3 N 			: NORMAL ;
+	float2 UV 			: TEXCOORD0 ;
+	float4 binormal 	: TEXCOORD1 ;
+	float4 tangent 		: TANGENT ;
+};
+
+
+struct v2f
+{
+	float4 pos	    		: POSITION;	
+	float3 N 				: TEXCOORD0 ;
+	float3 worldBinormal 	: TEXCOORD1 ;
+	float3 worldTangent		: TEXCOORD2 ;
+	float3 wPos 			: TEXCOORD3;
+	float3 diff 			: TEXCOORD4;
+	float2 UV 				: TEXCOORD5;
+	float4 pPos 			: TEXCOORD6 ; // position 2d projetée
+};
+
+
+
+//================================================================================
+//vertex shader
+//================================================================================
+v2f vShader( appData i)
+{
+	v2f o;
+
+	o.pos = mul(worldViewProj, i.pos);
+	o.pPos = o.pos;
+	o.N = mul(worldInverseTranspose,float4(i.N, 0) ).xyz;
+	o.worldBinormal = mul(worldInverseTranspose,i.binormal).xyz;
+	o.worldTangent = mul(worldInverseTranspose,i.tangent).xyz;
+
+	o.wPos = mul(world, i.pos).xyz;
+
+	o.UV = i.UV;
+
+	return o;
+
+}
+
+//=================================================================
+//pixel shader
+//=================================================================
+float4 pShader( v2f i ) : COLOR
+{
+	float3 E = viewInverseTranspose[3].xyz; //get eye position from viewInverseTranspose matrix
+	float3 V = normalize(E-i.wPos);
+
+
+
+	float4 o;
+	float3 N = normalize(i.N);
+
+	float3 L = -(normalize(lightDir.xyz));
+	float3 R = reflect(L,N);
+	float2 UV = i.UV;
+
+	float shadeDot =  saturate( dot(N, L));
+	float4 normalColor = tex2D(normalMap, i.UV);
+	float4 texColor = tex2D(diffuseMap  ,i.UV ) ;	
+
+
+	half2 envUV = half2(i.pPos.xy)*(0.5f/i.pPos.w);
+
+		
+	float limitMin = 15;
+	float limitMax = 25;
+	float distance = length(E-i.wPos);
+	float fallOff =   1- (limitMin - distance) / (limitMin - limitMax);
+ 	float4 lineColor =  tex2D(lineMap,float2(i.wPos.x, i.wPos.y) * lineScale);
+	float4 gradientIntensity =  tex2D(gradientIntensityMap,float2(i.wPos.y* gradientScale.x + time * gradientSpeed , 0.5) );
+	
+	
+	float3 noiseColor =   tex2D(noiseMap, float2( V.x *  noiseScale  + time , V.y*noiseScale + time ) );
+	noiseColor /= 4;
+
+	float dotValue = dot(V,N);
+	float diffuseLight = saturate(dot(N,L));
+
+
+
+
+
+	o.rgb =( texColor.rgb + noiseColor.rgb )   + (saturate( ( (1 -gradientIntensity.r) * gradientOpacity))) / 3.0f ;
+
+	
+	 o.a  = texColor.a *  lineColor.r * holoOpacity  ;
+
+
+	
+	
+
+	return o;
+}
+
+//---------------------------------------------
+technique t0
+{ 
+	pass p0
+    {	
+    	
+	//	AlphaFunc = float2(GREATER, .05);
+	//	AlphaBlendEnable = True;	
+   	//	FrontFace = CCW;
+   	//	CulLFaceENable = True;
+   	//FrontFace = CCW;
+   		//CulLFaceENable = True;	
+		VertexProgram   = compile VS_PROFILE vShader();
+		FragmentProgram = compile PS_PROFILE pShader();
+    }
+}
+
+

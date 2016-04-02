@@ -1,0 +1,28 @@
+<rooms>
+	<room type="Boss">
+		<bossSpawn  rotation="0" posX="0" posY="0.12" posZ="-22.99"/>
+		<door type="South" socket="Normal" posX="0" posY="3" posZ="15.5"/>
+		<boundingbox posX="0" posZ="-20.99" radiusX="34.1" radiusZ="34.99"/>
+		<collision rotation="0" posX="-3.99" posZ="7" radiusX="2" radiusZ="11.75" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="-24.99" posZ="-22.99" radiusX="1.745" radiusZ="2.88" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="25" posZ="-22.99" radiusX="1.745" radiusZ="3.255" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="0" posZ="-47.99" radiusX="3.08" radiusZ="1.74" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="9" posZ="-2.99" radiusX="6.5" radiusZ="1.98" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="-8.99" posZ="-2.99" radiusX="6.5" radiusZ="1.935" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="4.25" posZ="7" radiusX="2" radiusZ="11.75" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-44.99" posX="17" posZ="-11.99" radiusX="2" radiusZ="14.77" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="45" posX="-15.99" posZ="-10.99" radiusX="1.815" radiusZ="14.25" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-44.99" posX="-13.99" posZ="-36.99" radiusX="1.845" radiusZ="19.355" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="45" posX="14" posZ="-36.99" radiusX="2.055" radiusZ="19.03" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="0" posZ="-22.99" radiusX="1.85" radiusZ="4.5" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="90" posX="0" posZ="-22.99" radiusX="1.85" radiusZ="4.5" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="135" posX="0" posZ="-22.99" radiusX="1.85" radiusZ="4.5" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="225" posX="0" posZ="-22.99" radiusX="1.85" radiusZ="4.5" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="6.5" posZ="-42.99" radiusX="3.175" radiusZ="1.98" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="-6.99" posZ="-42.99" radiusX="3.455" radiusZ="1.955" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-89.99" posX="-19.99" posZ="-15.99" radiusX="3.585" radiusZ="1.97" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-89.99" posX="-19.99" posZ="-29.99" radiusX="3.355" radiusZ="1.89" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-89.99" posX="20" posZ="-29.99" radiusX="3.655" radiusZ="1.87" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-89.99" posX="20" posZ="-15.99" radiusX="3.685" radiusZ="1.995" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+	</room>
+</rooms>

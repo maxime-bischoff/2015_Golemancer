@@ -1,0 +1,111 @@
+/**********************************************
+Transform vertex
+Color pixel
+***********************************************/
+#include "common.h"
+
+
+
+
+
+texture diffuse
+<
+	string UIName = "Diffuse Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+sampler2D diffuseMap <
+string UIName = "Diffuse";
+> = sampler_state{
+	Texture = <diffuse>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float3 coloration1 : DIFFUSE
+<
+> = {1.0,1.0,1.0};
+
+float3 coloration2 : DIFFUSE
+<
+> = {1.0,1.0,1.0};
+
+float opacity 
+< 	
+string UIWidget = "slider";
+float UIMin = 0;
+float UIMax = 1;
+> = 1.0f;
+
+float2 panningSpeed1 
+< 	
+> = {0.0f,0.0f};
+
+float2 panningSpeed2 
+< 	
+> = {0.0f,0.0f};
+
+float2 panningScale
+< 	
+> = {1.0f,1.0f};
+
+
+float time : TIME;
+
+struct appData
+{
+	float4 pos 			: POSITION ; // position 3d objet
+	float2 UV			: TEXCOORD0 ;
+};
+
+
+struct v2f
+{
+	float4 pos 		: POSITION ; // position 2d projetée
+	half2 UV 		: TEXCOORD0;
+};
+
+
+
+//================================================================================
+//vertex shader
+//================================================================================
+v2f vShader( appData i)
+{
+	v2f o;
+	o.pos = mul(worldViewProj,i.pos);	//transform to view and project	
+	o.UV = i.UV;
+
+return o;
+}
+
+//=================================================================
+//pixel shader
+//=================================================================
+float4 pShader( v2f i ) : COLOR
+{
+	float4 o;
+
+	float4 light1 =  tex2D(diffuseMap, i.UV * panningScale + time * panningSpeed1) ;
+	float4 light2 =  tex2D(diffuseMap, i.UV * panningScale + time * panningSpeed2);
+	o.rgb = light1.rgb * coloration1 + light2.rgb  *coloration2;
+	
+	o.a = (light1.a + light2.a) *  opacity;
+	return o;
+}
+
+//---------------------------------------------
+technique t0
+{ 
+	pass p0
+    {		
+		VertexProgram   = compile VS_PROFILE vShader();
+		FragmentProgram = compile PS_PROFILE pShader();
+    }
+}
+
+

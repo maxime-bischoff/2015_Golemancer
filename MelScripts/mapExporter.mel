@@ -1,0 +1,525 @@
+proc string BoolToString(int $value)
+{
+    if($value == 1) return "true"; else return "false";     
+}
+
+global proc float roundOff(float $value)
+
+{ 
+int $precision = 2;
+return (trunc($value*`pow 10 $precision`+0.5)/`pow 10 $precision`);}
+
+
+
+global proc mapExporter()
+{
+
+	$response = `confirmDialog -title "Confirm" 
+			              -message "Do you want to export ?"
+			              -button "Yes"
+			              -button "No"  			             
+			              -defaultButton "Yes"
+			              -cancelButton "Yes"
+			              -dismissString "No"`;
+			             
+			            
+						  
+			if( $response == "Yes" ) {
+		
+		} else if( $response == "No" ) {
+			return;
+		}		
+						  
+
+
+$fileName = `file -q -sn - shn`;
+$fileName = basename ($fileName, ".mb") ;
+
+string $filePath = `workspace -q -fn` + "/../Sources/Data/Maps/"+$fileName+".xml" ;
+
+
+if(`filetest -e $filePath`)
+{
+  if(!`filetest -w $filePath`)
+  { 
+      $response = `confirmDialog -title "Unable to save" 
+			              -message "Gosh ! The destination file isn't writable. The file can't be saved"
+			              -button "Damn"			         			             
+			              -defaultButton "Damn"	
+			              -cancelButton "Damn"		           
+			              -dismissString "Damn"`;          
+						  
+			if( $response == "Damn" ) {
+			    print ("Error, the file "+$filePath+" isn't writable");
+			    return;
+		    }				
+  }    
+}
+
+
+
+$fileId = `fopen $filePath "w"` ;  
+
+
+
+
+fprint  $fileId ("<rooms>\n");
+
+
+string $rooms[] = `ls   "Items"`;
+
+for($room in $rooms)
+{
+    
+       fprint  $fileId ("\t<room");
+    // =============== ROOM TYPE
+    // =============================
+    string $mapInfoPath= $room+"|mapInfos";
+    string $mapinfos[] = `ls -l $mapInfoPath`;  
+ 
+    if($mapinfos[0] != "")
+    {   
+        $type     = `getAttr -as($mapinfos[0]+".Type")` ;
+        fprint  $fileId (" type=\""+$type+"\"");
+    }   
+    
+    
+      fprint  $fileId (">\n");
+    
+         
+ 
+    
+   // ===================================== //
+  // =========== PLAYER SPAWN ============ //
+ // ===================================== //
+    
+    string $playerPath= $room+"|playerSpawn*";
+    string $playerSpawn[] = `ls -l $playerPath`;  
+    print("PlayerSpawn ="+$playerSpawn[0]+"\n"); 
+    if($playerSpawn[0] != "")
+    {   
+        fprint  $fileId ("\t\t<playerSpawn");
+
+        $RotationY     = roundOff(`getAttr ($playerSpawn[0]+".rotateY")`) ;
+        fprint  $fileId (" rotation=\""+$RotationY+"\"");
+
+        $TranslateX     = roundOff(`getAttr ($playerSpawn[0]+".translateX")`) ;
+        fprint  $fileId (" posX=\""+$TranslateX+"\"");
+
+        $TranslateZ     = roundOff(`getAttr ($playerSpawn[0]+".translateZ")`) ;
+        fprint  $fileId (" posZ=\""+$TranslateZ+"\"");
+        
+        fprint  $fileId ("/>\n");
+    }
+
+
+   // ===================================== //
+  // =========== BOSS SPAWN ============ //
+ // ===================================== //
+    
+    string $bossPath= $room+"|bossSpawn*";
+    string $bossSpawn[] = `ls -l $bossPath`;  
+    print("BossSpawn ="+$bossSpawn[0]+"\n"); 
+    if($bossSpawn[0] != "")
+    {   
+        fprint  $fileId ("\t\t<bossSpawn ");
+
+        $RotationY     = roundOff(`getAttr ($bossSpawn[0]+".rotateY")`) ;
+        fprint  $fileId (" rotation=\""+$RotationY+"\"");
+
+        $TranslateX     = roundOff(`getAttr ($bossSpawn[0]+".translateX")`) ;
+        fprint  $fileId (" posX=\""+$TranslateX+"\"");
+
+        $TranslateY     = roundOff(`getAttr ($bossSpawn[0]+".translateY")`) ;
+        fprint  $fileId (" posY=\""+$TranslateY+"\"");
+
+        $TranslateZ     = roundOff(`getAttr ($bossSpawn[0]+".translateZ")`) ;
+        fprint  $fileId (" posZ=\""+$TranslateZ+"\"");
+        
+        fprint  $fileId ("/>\n");
+    }
+    
+   // ===================================== //
+  // ========== ENEMY SPAWN ============== //
+ // ===================================== //
+    
+    string $enemyPath= $room+"|enemySpawn*";
+    string $enemySpawns[] = `ls -l $enemyPath`;  
+    print("EnemySpawn ="+$enemySpawns[0]+"\n"); 
+    for ($enemy in $enemySpawns)
+    {  
+        fprint  $fileId ("\t\t<enemySpawn");
+        
+        $RotationY     = roundOff(`getAttr ($enemy+".rotateY")`) ;
+        fprint  $fileId (" rotation=\""+$RotationY+"\"");
+
+        $TranslateX     =roundOff( `getAttr ($enemy+".translateX")`) ;
+        fprint  $fileId (" posX=\""+$TranslateX+"\"");
+
+        $TranslateY     =roundOff( `getAttr ($enemy+".translateY")`) ;
+        fprint  $fileId (" posY=\""+$TranslateY+"\"");
+
+        $TranslateZ     = roundOff(`getAttr ($enemy+".translateZ")`) ;
+        fprint  $fileId (" posZ=\""+$TranslateZ+"\"");
+
+        $bActive = BoolToString(`getAttr ($enemy+".Golem_Laser")`) ;
+        fprint  $fileId (" golem_laser=\""+$bActive+"\"");
+
+        $bActive = BoolToString(`getAttr ($enemy+".Golem_Charge")`) ;
+        fprint  $fileId (" golem_charge=\""+$bActive+"\"");
+
+        $bActive = BoolToString(`getAttr ($enemy+".Golem_Stun")`) ;
+        fprint  $fileId (" golem_stun=\""+$bActive+"\"");
+
+        $bActive = BoolToString(`getAttr ($enemy+".Golem_Vegetable")`) ;
+        fprint  $fileId (" golem_vegetable=\""+$bActive+"\"");
+
+        $bActive = BoolToString(`getAttr ($enemy+".Force_Spawn")`) ;
+        fprint  $fileId (" force_spawn=\""+$bActive+"\"");
+
+        
+        fprint  $fileId ("/>\n");    
+    
+    }
+    
+
+
+   // ===================================== //
+  // ============== EXIT ================= //
+ // ===================================== //
+    
+    string $exitPath= $room+"|exit*";
+    string $exits[] = `ls -l $exitPath`;  
+
+    for ($exit in $exits)
+    {  
+        fprint  $fileId ("\t\t<exit ");
+         
+        $TranslateX     = roundOff(`getAttr ($exit+".translateX")`) ;
+        fprint  $fileId (" posX=\""+$TranslateX+"\"");
+
+        $TranslateY     = roundOff(`getAttr ($exit+".translateY")`) ;
+        fprint  $fileId (" posY=\""+$TranslateY+"\"");
+
+        $TranslateZ     = roundOff(`getAttr ($exit+".translateZ")`) ;
+        fprint  $fileId (" posZ=\""+$TranslateZ+"\"");
+        
+        fprint  $fileId ("/>\n");      
+    }
+    
+    
+   // ===================================== //
+  // ============== TELEPORT ============= //
+ // ===================================== //
+    
+    string $exitPath= $room+"|teleport*";
+    string $exits[] = `ls -l $exitPath`;  
+
+    for ($exit in $exits)
+    {  
+        fprint  $fileId ("\t\t<teleport ");
+         
+        $TranslateX     = roundOff(`getAttr ($exit+".translateX")`) ;
+        fprint  $fileId (" posX=\""+$TranslateX+"\"");
+
+        $TranslateY     = roundOff(`getAttr ($exit+".translateY")`) ;
+        fprint  $fileId (" posY=\""+$TranslateY+"\"");
+
+        $TranslateZ     = roundOff(`getAttr ($exit+".translateZ")`) ;
+        fprint  $fileId (" posZ=\""+$TranslateZ+"\"");
+        
+        fprint  $fileId ("/>\n");      
+    }
+    
+    
+       // ===================================== //
+      // ============ DOORS=================== //
+     // ===================================== //
+        
+    string $doorPath= $room+"|door*";
+    string $doors[] = `ls -l $doorPath`;  
+    
+      
+    for ($door in $doors)
+    {
+      //  string $doorArray[] = stringToStringArray($door, "|");
+          
+		string $location     = `getAttr ($door+".Location")` ;
+		  switch($location)
+		  {    case "0" : $location = "North";
+						    break;
+			   case "1" : $location = "South" ;
+							break;               
+			   case "2" : $location = "East" ;
+							break;                 
+			   case "3" : $location = "West";
+							break;			
+			   default:break;	  
+		  }
+        fprint  $fileId ("\t\t<door type=\""+$location+"\"");
+         
+
+
+          string $socket     = `getAttr ($door+".Socket")` ;
+      switch($socket)
+      {    
+        case "0" : $socket = "Normal";
+                   break;
+        case "1" : $socket = "Empty" ;
+                   break;               
+        
+         default:break;   
+      }
+		  
+          fprint  $fileId (" socket=\""+$socket+"\"");
+	
+		  
+
+        $TranslateX     = roundOff(`getAttr ($door+".translateX")`) ;
+        fprint  $fileId (" posX=\""+$TranslateX+"\"");
+		
+		    $TranslateY     = roundOff(`getAttr ($door+".translateY")`) ;
+        fprint  $fileId (" posY=\""+$TranslateY+"\"");
+
+        $TranslateZ     =roundOff( `getAttr ($door+".translateZ")`) ;
+        fprint  $fileId (" posZ=\""+$TranslateZ+"\"");
+        
+        fprint  $fileId ("/>\n");      
+    }
+     //fprint  $fileId ("/>\n\n");     
+     
+     // ================================================= //
+      // ===================== ORBE ===================== //
+     // ================================================= //
+      string $orbes[] = `ls -l "*Pedestal"`;  
+
+    for ($orbe in $orbes)
+    {  
+        fprint  $fileId ("\t\t<orbe ");
+  
+        $TranslateX     = roundOff( `getAttr ($orbe+".translateX")`) ;
+        fprint  $fileId (" posX=\""+$TranslateX+"\"");      
+                     
+        $TranslateY     = roundOff(`getAttr ($orbe+".translateY")`) ;
+        fprint  $fileId (" posY=\""+$TranslateY+"\"");
+
+        $TranslateZ     = roundOff(`getAttr ($orbe+".translateZ")`) ;
+        fprint  $fileId (" posZ=\""+$TranslateZ+"\"");
+
+        fprint  $fileId ("/>\n");      
+    }
+   // ===================================== //
+  // ============== BOUNDING BOX ================= //
+ // ===================================== //
+    
+    string $boundingBoxes[] = `ls -l "*boundingBox"`;  
+
+    for ($boundingBox in $boundingBoxes)
+    {  
+        fprint  $fileId ("\t\t<boundingbox");
+  
+          $TranslateX     = roundOff( `getAttr ($boundingBox+".translateX")`) ;
+          fprint  $fileId (" posX=\""+$TranslateX+"\"");
+  
+          $TranslateZ     = roundOff(`getAttr ($boundingBox+".translateZ")`) ;
+          fprint  $fileId (" posZ=\""+$TranslateZ+"\"");
+
+          $scaleX     = roundOff(`getAttr ($boundingBox+".scaleX")`) ;
+          fprint  $fileId (" radiusX=\""+$scaleX+"\"");
+          
+          $scaleZ     = roundOff(`getAttr ($boundingBox+".scaleZ")`) ;
+          fprint  $fileId (" radiusZ=\""+$scaleZ+"\"");
+                     
+        
+        fprint  $fileId ("/>\n");      
+    }
+
+
+
+       // ================================================= //
+      // ===================== SHAPE ===================== //
+     // ================================================= //
+        
+ 
+    string $roomShapes[] = `ls -l "*roomShape"`;  
+
+    for ($roomShape in $roomShapes)
+    {  
+        fprint  $fileId ("\t\t<roomshape>\n  ");
+        
+       //  print ($roomShape.cv[3] + "\n\n");
+       // int  $pointCount = `size($roomShape +".ep")` /3;
+       int $degreeCount = `getAttr ($roomShape+".spans")` ;
+       int $spanCount = `getAttr ($roomShape+".spans")` ;
+       int $pointCount = $degreeCount + $spanCount ;
+       print ("Size of = "+$pointCount+"\n\n");
+       print ("Number = "+$degreeCount+"\n\n");
+       for( $i =0; $i <= $degreeCount; $i++)
+       {
+       
+           float $coord[] = `pointPosition -w ($roomShape +".cv["+$i+"]")`;
+           fprint  $fileId ("\t\t\t<point posX=\""+roundOff($coord[0])+"\" posZ=\""+roundOff($coord[2])+"\"/>\n");      
+         // print (`  pointPosition -w ($roomShape +".cv["+$point+"]") `); 
+            
+        }    
+        fprint  $fileId ("\t\t</roomshape>\n");      
+    }
+     
+    
+       // =================================================== //
+      // ========================== PATHFINDING ============ //
+     // =================================================== //
+        
+    string $pathfindingPath= $room+"|Pathfinding|*";
+    string $nodes[] = `ls -l $pathfindingPath`;  
+    
+    if(size($nodes) >0)
+    {
+        
+    fprint  $fileId ("\t\t<pathfinding>\n");
+   
+    for ($node in $nodes)
+    {
+        string $doorArray[] = stringToStringArray($door, "|");
+          
+        fprint  $fileId ("\t\t\t<node ");
+         
+        $TranslateX     = roundOff(`getAttr ($node+".translateX")`) ;
+        fprint  $fileId (" posX=\""+$TranslateX+"\"");
+
+        $TranslateZ     = roundOff(`getAttr ($node+".translateZ")`) ;
+        fprint  $fileId (" posZ=\""+$TranslateZ+"\"");
+        
+         $door     = `getAttr ($node+".Door")` ;
+                  switch($door)
+                  {
+                       case "0" : $door = "None";
+                                   break;
+                       case "1" : $door = "North"   ;
+                       break;               
+                       case "2" : $door = "South" ;
+                       break;                 
+                       case "3" : $door = "East";
+                       break;
+                       case "4" : $door = "West";
+                       break;
+                       default:break;
+                  
+                  
+                  
+                  
+                  
+                  }
+                                    
+        fprint  $fileId (" door=\""+$door+"\"");
+        
+        fprint  $fileId ("/>\n");      
+    }
+    fprint  $fileId ("\t\t</pathfinding>\n");
+    }
+    
+       // ===================================== //
+      // ============= COLLISIONS ============ //
+     // ===================================== //
+       
+        string $path = $room+"|collisions|*";
+                
+        string $roomElements[] = `ls -l $path`;        
+                      
+  
+        float  $RotationY ;
+        float  $TranslateX ;
+        float  $TranslateZ ;
+        float $scaleX;
+        float $scaleZ;
+   
+         for($element in $roomElements)
+         {
+                            
+                  
+             string $collisions[] = `ls -l  $element`;
+             for($collision in $collisions)
+             {        
+                
+                               
+               
+                fprint  $fileId ("\t\t<collision");
+        
+                $RotationY     = roundOff(`getAttr ($collision+".rotateY")`) ;
+                fprint  $fileId (" rotation=\""+$RotationY+"\"");
+        
+                $TranslateX     = roundOff( `getAttr ($collision+".translateX")`) ;
+                fprint  $fileId (" posX=\""+$TranslateX+"\"");
+        
+                $TranslateZ     = roundOff(`getAttr ($collision+".translateZ")`) ;
+                fprint  $fileId (" posZ=\""+$TranslateZ+"\"");
+                     
+          
+                     
+                        
+                    if(`gmatch $collision  "*collisionBox*"`)
+                    {
+                      $scaleX     = roundOff(`getAttr ($collision+".scaleX")`) ;
+                      fprint  $fileId (" radiusX=\""+ $scaleX / 2 +"\"");
+                      $scaleZ     = roundOff(`getAttr ($collision+".scaleZ")`) ;
+                      fprint  $fileId (" radiusZ=\""+ $scaleZ / 2 +"\"");
+                      $attShape     = "box";
+                      fprint  $fileId (" shape=\""+$attShape+"\"");                        
+                    }else  if(`gmatch $collision  "*collisionCircle*"`)
+                    {
+                      $scaleZ     = `getAttr ($collision+".scaleZ")` ;
+                      fprint  $fileId (" radius=\""+$scaleZ+"\"");
+                      $attShape     = "circle";
+                      fprint  $fileId (" shape=\""+$attShape+"\"");                        
+                    }      
+                          
+                                
+                          
+                          
+                          
+                                       
+                $collideCamera = BoolToString(`getAttr ($collision+".CollideCamera")`) ;
+                fprint  $fileId (" collidecamera=\""+$collideCamera+"\"");
+        
+                $collidePlayer = BoolToString(`getAttr ($collision+".CollidePlayer")`) ;
+                fprint  $fileId (" collideplayer=\""+$collidePlayer+"\"");
+                     
+                $collideProjectiles = BoolToString(`getAttr ($collision+".CollideProjectiles")`) ;
+                fprint  $fileId (" collideprojectiles=\""+$collideProjectiles+"\"");
+                              
+                
+                   fprint  $fileId ("/>\n");      
+                          
+                                                 
+               
+                }
+                
+                
+             
+                 
+             
+         }
+                  
+         fprint  $fileId ("\t</room>\n");
+         
+     
+     }
+     
+ fprint  $fileId ("</rooms>\n");
+
+ 
+ fclose $fileId ;  
+ 
+ 
+ $response = `confirmDialog -title "Export" 
+			                -message "Map correctement exportée"
+			                -button "Ok"		           			             
+			                -defaultButton "Ok"`;
+			             
+			            
+
+ 
+ 
+ print("Map Exported succesfully in the location "+$filePath);
+ 
+ }

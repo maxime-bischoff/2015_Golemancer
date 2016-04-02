@@ -1,0 +1,67 @@
+/*global proc myMenu()
+{
+global string $showMyMenuCtrl;
+if (`menu -exists $showMyMenuCtrl`)
+   deleteUI $showMyMenuCtrl;
+string $name = "My Menu";
+global string $gMainWindow;
+$showMyMenuCtrl = `menu -p $gMainWindow -to true -l $name`;
+menuItem -p $showMyMenuCtrl -l "Exporter" -c ("source "mapExporter.mel"; ");
+menuItem -p $showMyMenuCtrl -l "Save" -c ("source "mapLoad.mel"; ");
+menuItem -p $showMyMenuCtrl -l "Load" -c ("source "mapSave.mel"; ");
+}
+;
+editMenuUpdate MayaWindow|mainEditMenu;
+myMenu;
+setFocus `paneLayout -query -pane1 viewPanes`;
+editMenuUpdate MayaWindow|mainEditMenu;
+
+*/
+
+global proc Menu()
+{
+    global string $myMenuMain;
+        if (`menu -exists $myMenuMain`)
+           deleteUI $myMenuMain;
+    string $name = "WombatMenu";
+ 
+    //to hook your menu into the main window
+    global string $gMainWindow;
+    $myMenuMain = `menu -p $gMainWindow -tearOff true -l $name`;
+ 
+    //here you can insert your labels and commands for the menu items. Replace test_01, 02, 03 with your own mel scripts.
+    menuItem -p $myMenuMain -l "Export XML" -c "mapExporter";
+	menuItem -p $myMenuMain -l "Save Items Scene" -c "mapSave";
+	menuItem -p $myMenuMain -l "Reload Items Scene" -c "mapLoad";		  
+	menuItem -p $myMenuMain -l "Refresh Collision Shader" -c "refreshCollisionShader";
+    menuItem -p $myMenuMain -l "Reload Scripts" -c "source \"userSetup.mel\"";
+    menuItem -p $myMenuMain -l "Reload Map" -c "ReloadMap";
+
+/*
+
+
+        global string $myMenuReload;
+        if (`menu -exists $myMenuReload`)
+           deleteUI $myMenuReload;
+    string $name = "ReloadScripts";
+ 
+    //to hook your menu into the main window
+    global string $gMainWindow2;
+    $myMenuReload = `menu -p $gMainWindow2 -tearOff true -l $name`;
+ 
+    //here you can insert your labels and commands for the menu items. Replace test_01, 02, 03 with your own mel scripts.
+    menuItem  $myMenuReload -l "Export XML" -c "mapExporter";
+
+
+*/
+
+
+
+}
+
+
+
+ 
+//calling the proc, so that the script runs
+//WombatMenu;
+

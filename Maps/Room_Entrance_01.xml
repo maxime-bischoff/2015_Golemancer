@@ -1,0 +1,28 @@
+<rooms>
+	<room type="Entrance">
+		<playerSpawn  rotation="-179.67" posX="-0.47" posZ="3.24"/>
+		<door type="North"  posX="-0.49" posZ="-5.91"/>
+		<roomshape>
+  			<point posX="11.92" posZ="11.77"/>
+			<point posX="10.46" posZ="-4.67"/>
+			<point posX="3.78" posZ="-7.59"/>
+			<point posX="-6.11" posZ="-6.9"/>
+			<point posX="-12.59" posZ="-3.26"/>
+			<point posX="-12.99" posZ="14.76"/>
+			<point posX="11.74" posZ="11.94"/>
+		</roomshape>
+		<pathfinding>
+			<node  posX="-0.49" posZ="-3.94" door="None"/>
+			<node  posX="-0.43" posZ="0.07" door="South"/>
+			<node  posX="-0.4" posZ="4.07" door="None"/>
+		</pathfinding>
+
+		<collision rotation="0" posX="-4.13" posZ="-3.4" radiusX="2.61" radiusZ="2.51" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="3.1" posZ="-3.54" radiusX="2.61" radiusZ="2.5" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="-0.12" posZ="8.75" radiusX="7.67" radiusZ="1" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="6.75" posZ="3.42" radiusX="1" radiusZ="4.66" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="-7.11" posZ="3.42" radiusX="1" radiusZ="4.66" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="-2.14" posZ="-0.89" radius="0.6680080209" shape="circle" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="1.13" posZ="-0.74" radius="0.6715584878" shape="circle" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+	</room>
+</rooms>

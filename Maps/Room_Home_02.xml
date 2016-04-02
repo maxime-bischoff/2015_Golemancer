@@ -1,0 +1,26 @@
+<rooms>
+	<room type="Home">
+		<playerSpawn rotation="180.36" posX="0" posZ="11"/>
+		<teleport  posX="-5.49" posY="0.01" posZ="-0.81"/>
+		<teleport  posX="0.24" posY="0" posZ="-0.81"/>
+		<teleport  posX="6.21" posY="0.05" posZ="-0.77"/>
+		<boundingbox posX="-0.28" posZ="2.94" radiusX="18.72" radiusZ="24.18"/>
+		<roomshape>
+  			<point posX="11.92" posZ="11.77"/>
+			<point posX="10.46" posZ="-4.67"/>
+			<point posX="3.78" posZ="-7.59"/>
+			<point posX="-6.11" posZ="-6.9"/>
+			<point posX="-12.59" posZ="-3.26"/>
+			<point posX="-12.99" posZ="14.76"/>
+			<point posX="11.74" posZ="11.94"/>
+		</roomshape>
+		<collision rotation="0" posX="11.78" posZ="12.46" radiusX="5.185" radiusZ="2.155" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="17.24" posZ="3.83" radiusX="4.79" radiusZ="9.525" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="-17.48" posZ="3.83" radiusX="4.81" radiusZ="7.445" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="-12.28" posZ="10.69" radiusX="8.59" radiusZ="4.52" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="-0" posZ="15.13" radiusX="4.945" radiusZ="0.74" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="-0" posZ="-4.78" radiusX="22.76" radiusZ="1.555" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="11.33" posZ="11.26" radiusX="7.69" radiusZ="4.96" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="-11.11" posZ="12.46" radiusX="5.185" radiusZ="2.155" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="true"/>
+	</room>
+</rooms>

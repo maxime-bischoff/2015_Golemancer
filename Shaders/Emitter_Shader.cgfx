@@ -1,0 +1,34 @@
+//#define USE_FOG
+//#define USE_NORMAL
+//#define USE_SPEC
+
+#define USE_EMISSIVE
+//#define USE_EMISSIVE_FALLOFF
+//#define USE_EMISSIVE_PANNING
+
+//#define USE_BOTTOM_FALLOFF
+//#define USE_TOP_FALLOFF
+//#define USE_REFLECTION
+//#define USE_REFLECTION_CUBE
+
+//#define USE_TWO_DIFFUSE
+
+//#define USE_FRESNEL_GLOW
+
+
+//#define USE_BAKED_AO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include "Uber_Envi_Shader.cgfx"

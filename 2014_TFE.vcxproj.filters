@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Collision.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Damage.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Functions.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Hitbox.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Solid.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Draw.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="SpellManager.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Living.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Spellbook.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\flib\flib.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\flib\flib_vec2.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\flib\flib_vec3.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\lua\lua.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Hud.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Focus.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle_manager.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaFunctions.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Collectible.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\Menu.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\Menu_main.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\Menu_popup.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Mission.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\TXML_Attribute.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\TXML_Element.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\TXML_Parser.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\TXML_Root.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFastRanged.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStrongAndSlow.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyVegetable.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Tuto.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapGenerator.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Home.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Collision.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Const.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Damage.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Draw.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Solid.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Hitbox.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="SpellManager.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Living.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Spellbook.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Hud.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="SpellList.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Focus.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle_manager.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\flib\flib_vec2.h">
+      <Filter>flib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\flib\flib_vec3.h">
+      <Filter>flib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\lua\lua.h">
+      <Filter>flib</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaFunctions.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Collectible.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\Menu.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\Menu_main.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\Menu_popup.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Mission.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\TSLL_Item.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\TSLL_Root.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\TSLL_TXML_Itemvalue.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\TXML_Attribute.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\TXML_Element.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\TXML_Parser.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\TXML_Root.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\TSLL_Item.hpp">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\TSLL_Root.hpp">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\TSLL_TXML_Itemvalue.hpp">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapGenerator.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Home.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Tuto.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFastRanged.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStrongAndSlow.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyVegetable.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="cpp">
+      <UniqueIdentifier>{5f20a64b-963c-4e1b-94d8-1a49f0616d5c}</UniqueIdentifier>
+      <Extensions>cpp</Extensions>
+    </Filter>
+    <Filter Include="header">
+      <UniqueIdentifier>{f7f8e1ac-e39d-4573-90c0-5a51d0252422}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+    </Filter>
+    <Filter Include="flib">
+      <UniqueIdentifier>{0b4ffab1-6436-41e7-a9bf-f59119b02f2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu">
+      <UniqueIdentifier>{24784fb4-3afd-4df6-bea1-b1a8d3fa873b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XML">
+      <UniqueIdentifier>{fc4baf63-406d-4996-a86a-731ad3d2305b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemies">
+      <UniqueIdentifier>{21cedfef-0097-4340-96d6-de0c146c37b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{035c11ce-e65f-42e6-8b31-a25dab074755}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

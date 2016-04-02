@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="PS3|Win32">
+      <Configuration>PS3</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="PSP|Win32">
+      <Configuration>PSP</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3f730fce-b0dc-4537-a701-524e74dc9fdd}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>2014_TFE</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='PSP|Win32'">
+    <ConfigurationType>Makefile</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='PS3|Win32'">
+    <ConfigurationType>Makefile</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\etc\common.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\etc\common.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='PS3|Win32'">
+    <Import Project="..\..\etc\common.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='PSP|Win32'">
+    <Import Project="..\..\etc\common.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>../../lib/flib;../../lib/lua;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>../../lib/flib;../../lib/lua;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader />
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ShowIncludes>false</ShowIncludes>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader />
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ShowIncludes>false</ShowIncludes>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\lib\flib\flib.cpp" />
+    <ClCompile Include="..\..\lib\flib\flib_vec2.cpp" />
+    <ClCompile Include="..\..\lib\flib\flib_vec3.cpp" />
+    <ClCompile Include="..\..\lib\lua\lua.cpp" />
+    <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collectible.cpp" />
+    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="Damage.cpp" />
+    <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Draw.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyFastRanged.cpp" />
+    <ClCompile Include="EnemyStrongAndSlow.cpp" />
+    <ClCompile Include="EnemyVegetable.cpp" />
+    <ClCompile Include="Fade.cpp" />
+    <ClCompile Include="Focus.cpp" />
+    <ClCompile Include="Functions.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Hitbox.cpp" />
+    <ClCompile Include="Home.cpp" />
+    <ClCompile Include="Hud.cpp" />
+    <ClCompile Include="Living.cpp" />
+    <ClCompile Include="LuaFunctions.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapGenerator.cpp" />
+    <ClCompile Include="Menu\Menu.cpp" />
+    <ClCompile Include="Menu\Menu_main.cpp" />
+    <ClCompile Include="Menu\Menu_popup.cpp" />
+    <ClCompile Include="Mission.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="Particle_manager.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Room.cpp" />
+    <ClCompile Include="Solid.cpp" />
+    <ClCompile Include="Spellbook.cpp" />
+    <ClCompile Include="SpellManager.cpp" />
+    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Trigger.cpp" />
+    <ClCompile Include="Tuto.cpp" />
+    <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="World.cpp" />
+    <ClCompile Include="XML\TXML_Attribute.cpp" />
+    <ClCompile Include="XML\TXML_Element.cpp" />
+    <ClCompile Include="XML\TXML_Parser.cpp" />
+    <ClCompile Include="XML\TXML_Root.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\lib\flib\flib_vec2.h" />
+    <ClInclude Include="..\..\lib\flib\flib_vec3.h" />
+    <ClInclude Include="..\..\lib\lua\lua.h" />
+    <ClInclude Include="Boss.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collectible.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="Const.h" />
+    <ClInclude Include="Damage.h" />
+    <ClInclude Include="Door.h" />
+    <ClInclude Include="Draw.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyFastRanged.h" />
+    <ClInclude Include="EnemyStrongAndSlow.h" />
+    <ClInclude Include="EnemyVegetable.h" />
+    <ClInclude Include="Fade.h" />
+    <ClInclude Include="Focus.h" />
+    <ClInclude Include="Functions.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Hitbox.h" />
+    <ClInclude Include="Home.h" />
+    <ClInclude Include="Hud.h" />
+    <ClInclude Include="Living.h" />
+    <ClInclude Include="LuaFunctions.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapGenerator.h" />
+    <ClInclude Include="Menu\Menu.h" />
+    <ClInclude Include="Menu\Menu_main.h" />
+    <ClInclude Include="Menu\Menu_popup.h" />
+    <ClInclude Include="Mission.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="Particle_manager.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="Room.h" />
+    <ClInclude Include="Solid.h" />
+    <ClInclude Include="Spellbook.h" />
+    <ClInclude Include="SpellList.h" />
+    <ClInclude Include="SpellManager.h" />
+    <ClInclude Include="Time.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Trigger.h" />
+    <ClInclude Include="Tuto.h" />
+    <ClInclude Include="Wall.h" />
+    <ClInclude Include="World.h" />
+    <ClInclude Include="XML\TSLL_Item.h" />
+    <ClInclude Include="XML\TSLL_Item.hpp" />
+    <ClInclude Include="XML\TSLL_Root.h" />
+    <ClInclude Include="XML\TSLL_Root.hpp" />
+    <ClInclude Include="XML\TSLL_TXML_Itemvalue.h" />
+    <ClInclude Include="XML\TSLL_TXML_Itemvalue.hpp" />
+    <ClInclude Include="XML\TXML_Attribute.h" />
+    <ClInclude Include="XML\TXML_Element.h" />
+    <ClInclude Include="XML\TXML_Parser.h" />
+    <ClInclude Include="XML\TXML_Root.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

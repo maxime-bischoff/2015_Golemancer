@@ -1,0 +1,351 @@
+/**********************************************
+Transform vertex
+Color pixel
+***********************************************/
+#include "common.h"
+
+float3 matColor : DIFFUSE
+<
+string UIName = "Material Color";
+> = {0,0,0};
+
+float3 lightColor : DIFFUSE
+<
+
+> = {1,1,1};
+
+float4 lightDir : DIRECTION
+<
+	string Space = "World";
+> = {0,1,0,0};
+
+float3 ambient : DIFFUSE
+<
+> = {0.2,0.2,0.2};
+
+
+float3 technoColor : DIFFUSE
+<
+
+> = {1,1,1};
+
+
+
+
+float3 specLightColor : DIFFUSE
+<
+> = {1,1,1};
+
+float3 fresnelColor : DIFFUSE
+<
+> = {1,1,1};
+
+float fresnelStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 1.0f;
+	float UIMax = 100.0f;
+> = 1.0f;
+
+
+
+bool useFresnelGradient<string UIName   = "Use Fresnel Gradient";> = false;
+
+texture fresnelGradientTex
+<
+	string UIName = "Fresnel Gradient Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+
+sampler2D fresnelGradientMap<
+string UIName = "Fresnel Gradient";
+> = sampler_state{
+	Texture = <fresnelGradientTex>;
+	WrapS = ClampToEdge;
+	WrapT = ClampToEdge;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float matShininess
+<
+	string UIWidget = "slider";
+	float UIMin = 1.0;
+	float UIMax = 100.0;
+> = 1.0;
+
+float specFresnel
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 0.0;
+
+texture normalTex
+<
+	string UIName = "Normal Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D normalMap 
+<
+string UIName = "Normal";
+> = sampler_state{
+	Texture = <normalTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+texture technoTex
+<
+	string UIName = "Techno Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D technoMap 
+<
+string UIName = "Techno";
+> = sampler_state{
+	Texture = <technoTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float technoScale
+<
+	string UIWidget = "slider";
+	float UIMin = -5.0;
+	float UIMax = 10.0;
+> = 1.0f;
+
+texture energyTex
+<
+	string UIName = "Energy Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D energyMap 
+<
+string UIName = "Energy";
+> = sampler_state{
+	Texture = <energyTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float energySpeed
+<
+	string UIWidget = "slider";
+	float UIMin = -10.0;
+	float UIMax = 10.0;
+> = 1.0f;
+
+float energyScale
+<
+	string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 10.0;
+> = 1.0f;
+
+float normalStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0f;
+
+texture reflectionTexture
+<
+	string UIName = "Reflection Texture";
+	string name = "default_texture.dds";
+	string ResourceType = "Cube";
+>;
+
+samplerCUBE cubeMap 
+<
+string UIName = "Cube Map";
+> = sampler_state
+{
+	Texture = <reflectionTexture>;
+	MinFilter = LinearMipMapLinear;
+  	MagFilter = Linear;
+	WrapR = ClampToEdge;
+	WrapS = ClampToEdge;
+	WrapT = ClampToEdge;
+};
+
+float reflexionOpacity
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0f;
+
+float reflexionRoughness
+<
+string UIWidget = "slider";
+
+float UIMin = 0.0;
+float UIMax = 1.0;
+> = 1.0;
+
+float time : Time;
+
+struct appData
+{
+	float4 pos 			: POSITION ; // position 3d objet
+	float3 N 			: NORMAL ;
+	float3 T 			: TANGENT  ;
+	//float3 B : BINORMAL;
+	float2 UV			: TEXCOORD0 ;
+};
+
+
+struct v2f
+{
+	float4 pos 			: POSITION ; // position 2d projetée	
+
+	half4 VU 			: TEXCOORD0;
+	half4 LV 			: TEXCOORD1;	
+	float4 wPos : TEXCOORD4;
+	half3 N : TEXCOORD5;
+};
+
+
+
+//================================================================================
+//vertex shader
+//================================================================================
+v2f vShader( appData i)
+{
+v2f o;
+	o.pos = mul(worldViewProj,i.pos);	//transform to view and project
+	float3 P = mul(world, i.pos).xyz ;//world vertex position
+	half3 N = mul(world, float4(i.N, 0)).xyz;
+	half3 T = mul(world, float4(i.T, 0)).xyz;
+	half3 B = cross(N,T);
+
+
+	float3x3 worldToTangent = float3x3(T,B,N);
+
+	//View Vector
+	float3 E = viewInverseTranspose[3].xyz;
+	float3 Vworld = E-P;
+	o.VU.rgb= mul(worldToTangent, Vworld);
+	o.VU.rgb = normalize(o.VU.rgb);
+	//Light Vector
+	o.LV.rgb = mul( worldToTangent, -lightDir.xyz ).rgb;
+
+	o.wPos.xyz = mul(world, i.pos).xyz;
+	o.VU.a = i.UV.x;
+	o.LV.a = i.UV.y;
+
+	o.N = N;
+
+return o;
+
+}
+
+//=================================================================
+//pixel shader
+//=================================================================
+float4 pShader( v2f i ) : COLOR
+{
+
+
+float4 o;
+
+
+
+	half2 UV = half2(i.VU.a, i.LV.a);
+	half3 L = i.LV.rgb;
+	half3 N = half3(0,0,1);
+	half3 V = i.VU.rgb;
+	
+
+	half2 Nxy = tex2D(normalMap  , UV * technoScale ).ga*2-1 ;
+	// N = half3( Nxy, sqrt(1- Nxy.x*Nxy.x - Nxy.y*Nxy.y ) );
+N =  normalize(half3(Nxy, 1));
+	// N =  lerp(half3(0,0,1) , N,  normalStrength );
+
+
+	half3 RV = reflect( -V, N );
+	half3 R = reflect(L, N);
+
+
+	half fresnel = saturate(2-specFresnel-saturate(dot(N,V)));
+	half shadeDot =  saturate( dot(N, L));
+
+
+
+
+
+
+
+
+
+
+
+
+	half diffuseLight = saturate(dot(N,L));
+	half specularLight = pow(saturate(dot(-V,R)),matShininess);
+
+	half3 diffuse = diffuseLight * lightColor;
+	half3 specular = specularLight * specLightColor ;
+
+
+
+
+
+
+
+
+	float3 cubeColor =  texCUBE(cubeMap, -reflect(V,N) , reflexionRoughness, reflexionRoughness);
+	
+	float3 technoMaskColor = 1-  tex2D(technoMap, UV * technoScale);
+	float3 energyGradientColor =   tex2D(energyMap, half2(0.5, i.wPos.y * energyScale  + time * energySpeed));
+
+	half fFresnelValue = saturate( tex2D(fresnelGradientMap, half2( dot(V,N), 0.5 ) ) );
+
+	float3 texColor =   cubeColor  * reflexionOpacity   ;
+
+
+
+
+	o.rgb = texColor * (diffuse + ambient) +  fresnelColor * fFresnelValue * fresnelStrength  +  technoMaskColor * energyGradientColor * technoColor;
+
+
+	o.a = 1;
+	return o;
+}
+
+//---------------------------------------------
+technique t0
+{ 
+	pass p0
+    {		
+		VertexProgram   = compile VS_PROFILE vShader();
+		FragmentProgram = compile PS_PROFILE pShader();
+    }
+}
+
+

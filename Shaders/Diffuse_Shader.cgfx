@@ -1,0 +1,103 @@
+/**********************************************
+Transform vertex
+Color pixel
+***********************************************/
+#include "common.h"
+
+float3 matColor : DIFFUSE
+<
+string UIName = "Material Color";
+> = {1,1,1};
+
+
+float opacity
+<
+	string UIName	= "Opacity" ;
+	float UIMin		= 0.0 ;
+	float UIMax		= 1.0  ;
+	
+>	= 1.0;
+
+texture RGBTexture
+<
+	string RessourceType = "2D";
+>;
+
+sampler2D RGBSampler = sampler_state{
+
+	Texture = <RGBTexture>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	MinFilter = NearestMipMapLinear;
+	MagFilter = Linear;
+	//MaxAnisotropy = 4;
+	//LODBias = -.5;
+};
+
+
+
+struct appData
+{
+	float4 pos 			: POSITION ; // position 3d objet
+	float2 UV 			: TEXCOORD0 ;
+};
+
+
+struct v2f
+{
+	float4 pos 				: POSITION ; // position 2d projetée
+	float3 wPos 			: TEXCOORD3;
+	float3 diff 			: TEXCOORD4;
+	float2 UV 				: TEXCOORD5;
+};
+
+
+
+//================================================================================
+//vertex shader
+//================================================================================
+v2f vShader( appData i)
+{
+	v2f o;
+
+	o.pos = mul(worldViewProj, i.pos);
+
+	o.wPos = mul(world, i.pos).xyz;
+
+	o.UV = i.UV;
+
+	return o;
+
+}
+
+//=================================================================
+//pixel shader
+//=================================================================
+float4 pShader( v2f i ) : COLOR
+{
+
+
+	float4 o;
+
+
+	float4 texColor = tex2D(RGBSampler  , i.UV ) ;	
+
+
+
+	o.rgb = texColor.rgb * matColor ;
+
+	o.a = texColor.a * opacity ;
+	return o;
+}
+
+//---------------------------------------------
+technique t0
+{ 
+	pass p0
+    {		
+		VertexProgram   = compile VS_PROFILE vShader();
+		FragmentProgram = compile PS_PROFILE pShader();
+    }
+}
+
+

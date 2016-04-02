@@ -1,0 +1,25 @@
+<rooms>
+	<room type="Tuto">
+		<exit  posX="-0.49" posZ="-1.49"/>
+		<door type="South" socket="Normal" posX="-0.49" posY="0" posZ="16"/>
+		<boundingbox posX="-0.49" posZ="0.5" radiusX="13.2" radiusZ="15.23"/>
+		<roomshape>
+  			<point posX="11.93" posZ="8.17"/>
+			<point posX="11.79" posZ="-13.96"/>
+			<point posX="-10.87" posZ="-13.8"/>
+			<point posX="-11.27" posZ="7.96"/>
+			<point posX="11.74" posZ="8.34"/>
+		</roomshape>
+		<collision rotation="90" posX="-9.99" posZ="-1.99" radiusX="10.2" radiusZ="0.725" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="90" posX="9" posZ="-1.99" radiusX="10.2" radiusZ="0.725" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="-0.49" posZ="-10.99" radiusX="10.2" radiusZ="0.725" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-44.99" posX="-6.99" posZ="9" radiusX="5.18" radiusZ="0.725" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-134.99" posX="6" posZ="9" radiusX="5.18" radiusZ="0.725" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="90" posX="-4.99" posZ="-8.49" radiusX="1.755" radiusZ="1.69" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="90" posX="4" posZ="-8.49" radiusX="1.755" radiusZ="1.69" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="90" posX="6.5" posZ="4" radiusX="1.755" radiusZ="1.69" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="90" posX="-7.49" posZ="4" radiusX="1.755" radiusZ="1.69" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="-179.99" posX="7" posZ="14" radiusX="5.39" radiusZ="2.9" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="-179.99" posX="-7.99" posZ="14" radiusX="5.39" radiusZ="2.9" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+	</room>
+</rooms>

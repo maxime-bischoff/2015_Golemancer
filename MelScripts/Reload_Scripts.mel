@@ -1,0 +1,5 @@
+
+global proc ReloadScripts()
+{
+	source "userSetup.mel";
+}

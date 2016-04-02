@@ -1,0 +1,14 @@
+<rooms>
+	<room type="Entrance">
+		<playerSpawn rotation="-182.67" posX="0" posZ="5.82"/>
+		<door type="North" socket="Normal" posX="1" posY="0" posZ="-14.49"/>
+		<boundingbox posX="0.97" posZ="6.29" radiusX="21.16" radiusZ="18.54"/>
+		<collision rotation="0" posX="-4.49" posZ="-11.99" radiusX="3.62" radiusZ="2.58" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="6.5" posZ="-11.99" radiusX="3.62" radiusZ="2.58" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="45" posX="-8.49" posZ="-3.99" radiusX="9.355" radiusZ="0.605" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-44.99" posX="10.5" posZ="-3.99" radiusX="9.355" radiusZ="0.605" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-89.99" posX="17.5" posZ="11.5" radiusX="9.355" radiusZ="0.605" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="-89.99" posX="-15.49" posZ="11.5" radiusX="9.355" radiusZ="0.605" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="1" posZ="20" radiusX="16.72" radiusZ="0.605" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+	</room>
+</rooms>

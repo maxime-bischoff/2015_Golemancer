@@ -1,0 +1,682 @@
+/**********************************************
+Transform vertex
+Color pixel
+***********************************************/
+#include "common.h"
+
+bool spacerC<string UIName   = "COLOR ==================";> = false;
+
+float3 matColor : DIFFUSE
+<
+string UIName = "Material Color";
+> = {0,0,0};
+
+float3 lightColor : DIFFUSE
+<
+
+> = {1,1,1};
+
+float4 lightDir : DIRECTION
+<
+	string Space = "World";
+> = {0,1,0,0};
+
+
+
+
+float3 ambient : DIFFUSE
+<
+> = {0.2,0.2,0.2};
+
+float3 topLightColor : DIFFUSE
+<
+> = {0.2,0.2,0.2};
+
+float3 bottomLightColor : DIFFUSE
+<
+> = {0.2,0.2,0.2};
+
+texture diffuse
+<
+	string UIName = "Diffuse Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D diffuseMap 
+<
+string UIName = "Diffuse";
+> = sampler_state{
+	Texture = <diffuse>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+
+
+
+texture gradientTexture
+<
+	string UIName = "Gradient Texture";
+	//string name = "default_color.dds";
+	
+	string TextureType = "2D";
+
+>;
+
+
+
+sampler2D gradientMap 
+<
+string UIName = "Gradient Shadow";
+> = sampler_state{
+
+	Texture = <gradientTexture>;
+	WrapS = ClampToEdge;
+	WrapT = ClampToEdge;
+	
+	MinFilter = Linear;
+    MagFilter = Linear;
+};
+
+
+
+
+
+
+
+
+bool spacerS<string UIName   = "SPECULAR ===============";> = false;
+
+texture specTex
+<
+	string UIName = "Specular Texture";
+		string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D specMap 
+<
+string UIName = "Specular";
+> = sampler_state{
+	Texture = <specTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+
+float3 specLightColor : DIFFUSE
+<
+> = {1,1,1};
+
+float matShininess
+<
+	string UIWidget = "slider";
+	float UIMin = 1.0;
+	float UIMax = 100.0;
+> = 25.0;
+
+float matDielectric
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 0.0;
+
+float matFresnel
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 0.0;
+
+float3 glowColor : DIFFUSE
+<
+> = {0,0,0};
+
+float glowStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 1;
+> = 0; 
+
+float glowWidth
+<
+	string UIWidget = "slider";
+	float UIMin = 0;
+	float UIMax = 3;
+> = 2; 
+
+
+
+bool spacerN<string UIName   = "NORMAL ==================";> = false;
+
+texture normalTex
+<
+	string UIName = "Normal Texture";
+		string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D normalMap 
+ <
+string UIName = "Normal";
+> = sampler_state{
+	Texture = <normalTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float normalStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0f;
+
+float normalMultiplier
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 5.0;
+> = 1.0f;
+
+
+bool spacerE<string UIName   = "EMISSIVE =================";> = false;
+
+
+texture emissive
+<
+	string UIName = "Emissive Texture";
+		string name = "default_texture.dds";
+	string TextureType = "2D";
+>;
+
+
+
+
+
+sampler2D emissiveMap 
+<
+string UIName = "Emissive";
+> = sampler_state{
+	Texture = <emissive>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float emissiveStrenght 
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 5.0;
+> = 1.0f;
+
+
+texture panningTex
+<
+	string UIName = "Normal Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D panningMap 
+<
+string UIName = "Panning tex";
+> = sampler_state{
+	Texture = <panningTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+texture panningMaskTex
+<
+	string UIName = "Normal Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D panningMaskMap 
+<
+string UIName = "Panning Mask";
+> = sampler_state{
+	Texture = <panningMaskTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float panningTextureOpacity
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0f;
+
+float panningTextureEmissive
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0f;
+
+float panningTextureScale
+<
+	string UIWidget = "slider";
+	float UIMin = -10.0;
+	float UIMax = 10.0;
+> = 1.0f;
+
+float2 panningTextureSpeed
+<
+	string UIWidget = "slider";
+	
+> = float2(0,0);
+
+
+
+
+
+/*******************************
+Reflection parameters
+*******************************/
+bool spacerR<string UIName   = "REFLEXION ==================";> = false;
+
+texture reflectionTexture
+<
+	string UIName = "Reflection Texture";
+	string name = "default_texture.dds";
+	string ResourceType = "Cube";
+>;
+
+samplerCUBE cubeMap 
+<
+string UIName = "Cube Map";
+> = sampler_state
+{
+	Texture = <reflectionTexture>;
+	MinFilter = LinearMipMapLinear;
+  	MagFilter = Linear;
+	WrapR = ClampToEdge;
+	WrapS = ClampToEdge;
+	WrapT = ClampToEdge;
+};
+
+texture reflectionMaskTex
+<
+	string UIName = "Reflection Texture";
+	string name = "default_texture.dds";
+	string TextureType = "2D";
+
+>;
+
+sampler2D reflectionMaskMap 
+<
+string UIName = "Reflexion Mask";
+> = sampler_state{
+	Texture = <reflectionMaskTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	
+	MinFilter = LinearMipMapLinear;
+    MagFilter = Linear;
+};
+
+float reflectionStrength
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0;
+
+float reflectionMetalness
+<
+	string UIWidget = "slider";
+	float UIMin = 0.0;
+	float UIMax = 1.0;
+> = 1.0;
+
+float metalnessCorrection
+<
+	string UIWidget = "slider";
+	float UIMin = 1.0;
+	float UIMax = 6.0;
+> = 1.0;
+
+
+
+
+/*******************************
+Second pass Shield parameters
+*******************************/
+bool spacerSH<string UIName   = "SHIELD (Technique character) =====";> = false;
+
+texture shieldTex
+<
+	string RessourceType = "2D";
+	string name = "default_texture.dds";
+>;
+
+
+sampler2D shieldMap 
+<
+string UIName = "Shield tex";
+> = sampler_state{
+	Texture = <shieldTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	MinFilter = LinearMipMapLinear;
+	MagFilter = Linear;
+	MaxAnisotropy = 4;
+	LODBias = -.5;
+};
+
+texture shieldHeightTex
+<
+	string RessourceType = "2D";
+	string name = "default_texture.dds";
+>;
+
+
+sampler2D shieldHeightMap 
+<
+string UIName = "Shield Height Map";
+> = sampler_state{
+	Texture = <shieldHeightTex>;
+	WrapS = Repeat;
+	WrapT = Repeat;
+	MinFilter = LinearMipMapLinear;
+	MagFilter = Linear;
+	MaxAnisotropy = 4;
+	LODBias = -.5;
+};
+
+
+float3 shieldColor : DIFFUSE
+<> = {0,0,0};
+
+
+float shieldOpacity
+<
+	float UIMin = 0;
+	float UIMax = 1;
+> = 1;
+
+float shieldWidth
+<
+	float UIMin = 0;
+	float UIMax = 0.10;
+> = 0.025;
+
+float shieldVisibleArea
+<
+	float UIMin = 0;
+	float UIMax = 1;
+> = 1;
+
+float noiseOpacity
+<
+	float UIMin = 0;
+	float UIMax = 1;
+> = 1;
+
+
+
+
+
+float time : Time;
+
+
+struct appData
+{
+float4 pos : POSITION ; // position 3d objet
+float3 N: NORMAL ;
+float2 UV : TEXCOORD0;
+float4 binormal 	: BINORMAL;
+float4 tangent 		: TANGENT;
+
+
+
+};
+
+
+struct v2f
+{
+float4 pos : POSITION; // position 2d projetée
+float3 N : TEXCOORD0;
+float3 worldBinormal 	: TEXCOORD1;
+float3 worldTangent		: TEXCOORD2;
+
+float3 wPos : TEXCOORD3;
+float3 diff : TEXCOORD4;
+float2 UV : TEXCOORD5;
+
+};
+
+
+
+//================================================================================
+//vertex shader
+//================================================================================
+v2f vShader( appData i)
+{
+	v2f o;
+
+	o.pos = mul(worldViewProj, i.pos);
+
+	o.N = mul(worldInverseTranspose,float4(i.N, 0) ).xyz;
+	o.worldBinormal = mul(worldInverseTranspose,i.binormal).xyz;
+	o.worldTangent = mul(worldInverseTranspose,i.tangent).xyz;
+
+	o.wPos = mul(world, i.pos).xyz;
+
+	o.UV = i.UV;
+
+	return o;
+
+}
+
+//=================================================================
+//pixel shader
+//=================================================================
+float4 pShader( v2f i ) : COLOR
+{
+
+	float3 worldNormal = tex2D(normalMap  , i.UV )*2 - 1 ;
+	worldNormal = 	normalize( (worldNormal.x * i.worldTangent) + (- worldNormal.y * i.worldBinormal) + (worldNormal.z * i.N)) ;
+
+
+
+	float4 o;
+	float3 N = normalize(i.N);
+	N = lerp(  i.N,worldNormal, normalStrength) * normalMultiplier;
+	float3 E = viewInverseTranspose[3].xyz; //get eye position from viewInverseTranspose matrix
+	float3 V = normalize(E-i.wPos);
+	float3 L = -(normalize(lightDir.xyz));
+	float3 R = reflect(L,N);
+	float2 UV = i.UV;
+
+
+	float shadeDot =  saturate( dot(N, L));
+
+	float4 texColor = tex2D(diffuseMap  , i.UV ) ;
+	float4 emissiveColor = tex2D(emissiveMap  , i.UV ) ;
+	float4 specColor = tex2D(specMap  , i.UV ) ;
+	float4 gradientColor =  tex2D(gradientMap  ,float2(shadeDot, 0.5f));	
+	float4 panningMask =  tex2D(panningMaskMap, i.UV);
+	float4 panningColor =  tex2D(panningMap, i.UV * panningTextureScale + time * panningTextureSpeed);
+	float4 cubeColor =  texCUBE(cubeMap, -reflect(V,N) );
+	float4 reflectionMaskColor =  tex2D(reflectionMaskMap, i.UV ) ;
+
+
+	float diffuseLight = saturate(dot(N,L));
+	float specularLight = pow(saturate(dot(-V,R)),matShininess);
+	float fresnel = saturate(2-matFresnel-saturate(dot(N,V)));
+
+float3 topLight =  float3(0,-1,0);
+float3 bottomLight = float3(0,1,0);
+
+
+
+	
+	float3 glow =  glowColor * (1 - saturate(dot(N, V) * glowWidth)) * glowStrength;
+
+	float3 diffuse = diffuseLight * lightColor;
+
+	float3 light2 =   saturate(dot(-topLight, N)) *topLightColor; 
+	light2 +=   saturate(dot(-bottomLight, N)) *bottomLightColor; 
+
+	float3 specular = specularLight * specLightColor * fresnel;
+	
+	specular *= lerp(float3(1,1,1),texColor,matDielectric);
+
+	float3 emissive = emissiveColor * emissiveStrenght;
+	float4 panningOverlay = panningColor * panningColor.a * panningMask * panningTextureOpacity;
+    texColor +=  panningOverlay + float4( matColor,0) ;
+
+    float reflectionFresnel = 1 - saturate( dot(N,V));
+    texColor.rgb = lerp( texColor.rgb , lerp(cubeColor.rgb,  cubeColor.rgb * texColor.rgb *metalnessCorrection,    reflectionMetalness)  ,  reflectionStrength * reflectionMaskColor.r);
+
+
+	o.rgb = texColor *  (diffuse * gradientColor.rgb + ambient )   + specular * specColor* fresnel +    texColor * emissive + panningOverlay.rgb  * panningTextureEmissive + glow * fresnel + light2;
+float4 shieldHeightMapColor =  tex2D(shieldHeightMap, i.UV ) ;
+
+//o.rgb =  shieldHeightMapColor.rgb;
+//o.rgb = worldNormal;
+//o.rgb = cubeColor.rgb;
+
+
+	//o.rgb = texColor.rgb;
+	//o.rgb = reflectionFresnel;
+	//o.rgb = cubeColor;
+	o.a = texColor.a;
+	return o;
+
+
+
+}
+
+
+//================================================================================
+//vertex shader pass2
+//================================================================================
+v2f vShader2( appData i)
+{
+	v2f o;
+
+	//float4 shieldHeightMapColor =  tex2D(shieldHeightMap, i.UV ) ;
+
+
+
+	i.pos = float4( i.pos.xyz + (i.N * shieldWidth ), 1 );
+	o.pos = mul(worldViewProj,i.pos) ;	//transform to view and project
+	o.N = mul(world, float4(i.N, 0)).xyz;
+	o.wPos = mul(world, i.pos).xyz;
+	o.UV = i.UV;
+
+	return o;
+
+}
+
+//=================================================================
+//pixel shader pass2
+//=================================================================
+float4 pShader2( v2f i ) : COLOR
+{
+
+	float4 o;
+
+	float3 E = viewInverseTranspose[3].xyz;//get eye position
+	float3 V = normalize(E-i.wPos); //Pixel to eye
+
+	i.N = normalize(i.N);
+	float3 noise = tex2D( shieldMap , i.UV + float2( time/50 , time/50) ) ;
+
+
+
+	float fresnel = 1- saturate(dot(V, i.N));
+
+	float value = min( dot(i.N,V) + (1-shieldVisibleArea), 1);
+	o.rgb = shieldColor*fresnel    ;
+	o.a = (1-value) * shieldOpacity  * lerp( 1, (noise ), noiseOpacity) ;
+
+	return o;
+
+}
+
+
+
+//---------------------------------------------
+technique t0
+{ 
+	pass p0
+    {		
+		VertexProgram   = compile VS_PROFILE vShader();
+		FragmentProgram = compile PS_PROFILE pShader();
+    }
+}
+
+technique AlphaBlend
+{ 
+	
+
+	pass p0
+    {	
+   		AlphaBlendEnable = True;	
+   		FrontFace = CCW;
+   		CulLFaceENable = True;
+		VertexProgram   = compile VS_PROFILE vShader();
+		FragmentProgram = compile PS_PROFILE pShader();
+    }
+}
+
+technique Character
+{
+
+	pass p0
+    {	
+   		AlphaBlendEnable = True;	
+   		FrontFace = CCW;
+   		CulLFaceENable = True;
+		VertexProgram   = compile VS_PROFILE vShader();
+		FragmentProgram = compile PS_PROFILE pShader();
+    }
+
+    pass p1
+    {	
+   		AlphaBlendEnable = True;	
+   		FrontFace = CCW;
+   		CulLFaceENable = True;
+		AlphaFunc = float2(GEqual,.5);
+   		//BlendFunc = int2(SrcAlpha, OneMinusSrcAlpha);
+	//	DepthMask = false;
+		VertexProgram   = compile VS_PROFILE vShader2();
+		FragmentProgram = compile PS_PROFILE pShader2();
+    }
+
+
+
+}

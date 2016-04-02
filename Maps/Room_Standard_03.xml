@@ -1,0 +1,32 @@
+<rooms>
+	<room type="Standard">
+		<enemySpawn  rotation="0" posX="1.94" posZ="-0.31"/>
+		<enemySpawn  rotation="0" posX="-0" posZ="-6.97"/>
+		<door type="East"  posX="10.11" posZ="-2.7"/>
+		<door type="South"  posX="-0.49" posZ="7.07"/>
+		<door type="West"  posX="-10" posZ="-2.7"/>
+		<door type="North"  posX="-0.26" posZ="-12.31"/>
+		<boundingbox posX="1.589" posZ="13.748" radiusX="43.163" radiusZ="53.216"/>
+		<pathfinding>
+			<node  posX="9.28" posZ="-2.59" door="None"/>
+			<node  posX="-9.05" posZ="-2.95" door="None"/>
+			<node  posX="-0.84" posZ="5.95" door="None"/>
+			<node  posX="-1.62" posZ="-2.91" door="None"/>
+			<node  posX="3.55" posZ="-2.26" door="None"/>
+			<node  posX="0.89" posZ="-5.51" door="None"/>
+		</pathfinding>
+
+		<collision rotation="0" posX="-9.17" posZ="2.88" radiusX="1.21" radiusZ="4.66" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="-5.11" posZ="6.34" radiusX="3.6" radiusZ="0.82" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="4.7" posZ="6.34" radiusX="4.31" radiusZ="0.76" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="9.18" posZ="2.34" radiusX="1.26" radiusZ="4.19" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="-5.26" posZ="-11.34" radiusX="4.13" radiusZ="1" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="9.08" posZ="-8.11" radiusX="1.23" radiusZ="4.51" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="5.77" posZ="2.89" radiusX="0.5" radiusZ="0.5" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="-4.46" posZ="1.88" radiusX="0.5" radiusZ="0.5" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="-5.99" posZ="-7.62" radiusX="2.13" radiusZ="2.79" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="6.81" posZ="-7.71" radiusX="3.12" radiusZ="2.88" shape="box" collidecamera="false" collideplayer="true" collideprojectiles="false"/>
+		<collision rotation="0" posX="4.87" posZ="-11.34" radiusX="4.13" radiusZ="1" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+		<collision rotation="0" posX="-9.22" posZ="-7.73" radiusX="1.21" radiusZ="4.3" shape="box" collidecamera="true" collideplayer="true" collideprojectiles="true"/>
+	</room>
+</rooms>
